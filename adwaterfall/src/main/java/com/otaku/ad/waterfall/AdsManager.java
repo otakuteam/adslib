@@ -462,7 +462,7 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void setLimitTime(long limitTime) {
-
+        mPref.edit().putLong(AdsConstants.PREF_AD_TIME, limitTime);
     }
 
     @Override
