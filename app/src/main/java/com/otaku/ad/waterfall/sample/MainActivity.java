@@ -25,18 +25,7 @@ public class MainActivity extends AppCompatActivity {
                             "ca-app-pub-3940256099942544~3347511713",
                             "ca-app-pub-3940256099942544/6300978111",
                             "ca-app-pub-3940256099942544/1033173712",
-                            "ca-app-pub-3940256099942544/5224354917"),
-                    new AdModel(AdsConstants.UNITY,
-                            "test",
-                            "banner",
-                            "video",
-                            "rewardedVideo"),
-
-                    new AdModel(AdsConstants.IRONSOURCE,
-                            "test",
-                            "DefaultBanner",
-                            "DefaultInterstitial",
-                            "DefaultRewardedVideo")
+                            "ca-app-pub-3940256099942544/5224354917")
             );
         } catch (NotSupportPlatformException e) {
             e.printStackTrace();

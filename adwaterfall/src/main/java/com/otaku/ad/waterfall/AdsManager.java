@@ -30,6 +30,7 @@ public class AdsManager implements IAdManager {
     private boolean mShow = false;
     private SharedPreferences mPref;
     private ArrayList<AdsPlatform> mAdsPlatform = new ArrayList<>();
+    private Context mContext;
 
     private AdsManager() {
     }
@@ -46,6 +47,7 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void init(Context context, boolean testMode, AdModel... models) throws NotSupportPlatformException {
+        mContext = context;
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mPref = context.getSharedPreferences("ads_config", Context.MODE_PRIVATE);
         mEnableAd = mPref.getBoolean(AdsConstants.PREF_ENABLE_AD, true);
@@ -53,7 +55,7 @@ public class AdsManager implements IAdManager {
                 AdsConstants.FACEBOOK, AdsConstants.MOPUB, AdsConstants.IRONSOURCE});
         ArrayList<String> waterFall = getWaterfall();
         if (waterFall == null || waterFall.isEmpty()) {
-            waterFall= new ArrayList<>();
+            waterFall = new ArrayList<>();
             for (AdModel adModel : models) {
                 if (!supportPlatforms.contains(adModel.getName()))
                     throw new NotSupportPlatformException("not support platform");
@@ -63,12 +65,14 @@ public class AdsManager implements IAdManager {
             saveWaterFall(waterFall);
         }
 
-        for (int i = 0; i < waterFall.size(); i++) {
-            AdsLog.i(TAG, "waterfall: " + waterFall.get(i));
-            mAdsPlatform.add(getAdsPlatformByName(waterFall.get(i), testMode));
-        }
-        for (AdsPlatform platform : mAdsPlatform) {
-            platform.init(context, testMode);
+        if (waterFall != null && waterFall.size() > 0) {
+            for (int i = 0; i < waterFall.size(); i++) {
+                AdsLog.i(TAG, "waterfall: " + waterFall.get(i));
+                mAdsPlatform.add(getAdsPlatformByName(waterFall.get(i), testMode));
+            }
+            for (AdsPlatform platform : mAdsPlatform) {
+                platform.init(context, testMode);
+            }
         }
     }
 
@@ -483,7 +487,10 @@ public class AdsManager implements IAdManager {
         String json = mPref.getString(name, null);
         Type type = new TypeToken<AdModel>() {
         }.getType();
-        return gson.fromJson(json, type);
+        if (json != null) {
+            return gson.fromJson(json, type);
+        }
+        return null;
     }
 
     @Override
@@ -501,7 +508,9 @@ public class AdsManager implements IAdManager {
         String json = mPref.getString(AdsConstants.PREF_AD_WATERFALL, null);
         Type type = new TypeToken<ArrayList<String>>() {
         }.getType();
-        return gson.fromJson(json, type);
+        if (json != null)
+            return gson.fromJson(json, type);
+        return null;
     }
 
     @Override
@@ -539,19 +548,61 @@ public class AdsManager implements IAdManager {
     }
 
     private AdsPlatform getAdsPlatformByName(String name, boolean testMode) {
-            AdModel adModel = getAdModelByName(name);
+        AdModel adModel = getAdModelByName(name);
         switch (name) {
             case AdsConstants.ADMOB:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new AdmobAdsManager(adModel);
             case AdsConstants.UNITY:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.UNITY, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new UnityAdsManager(adModel);
             case AdsConstants.MOPUB:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.MOPUB, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new MopubManager(adModel);
             case AdsConstants.IRONSOURCE:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.IRONSOURCE, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new IronSourceManager(adModel);
             case AdsConstants.FACEBOOK:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.FACEBOOK, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new FanManager(adModel);
             default:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
                 return new AdmobAdsManager(adModel);
         }
     }
