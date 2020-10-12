@@ -83,7 +83,7 @@ public class IronSourceManager extends AdsPlatform {
             @Override
             public void onInterstitialAdShowFailed(IronSourceError error) {
                 if(mPopupListener!=null)
-                    mPopupListener.OnShowFail();
+                    mPopupListener.OnClose();
             }
             /*
              * Invoked when the end user clicked on the interstitial ad.
@@ -141,8 +141,7 @@ public class IronSourceManager extends AdsPlatform {
              */
             @Override
             public void onRewardedVideoAdShowFailed(IronSourceError error) {
-                if (mRewardAdListener != null)
-                    mRewardAdListener.OnShowFail();
+
             }
             /*Invoked when the end user clicked on the RewardedVideo ad
              */

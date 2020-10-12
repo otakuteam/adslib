@@ -3,6 +3,7 @@ package com.otaku.ad.waterfall.sample;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.otaku.ad.waterfall.AdsManager;
@@ -24,7 +25,7 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void OnShowFail() {
-
+                Log.i("TEST__", "_test_OnShowFail");
             }
         });
     }

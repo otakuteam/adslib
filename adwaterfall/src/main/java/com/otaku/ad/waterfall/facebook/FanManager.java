@@ -73,7 +73,7 @@ public class FanManager extends AdsPlatform {
                 // Ad error callback
                 AdsLog.i(TAG, "Interstitial ad failed to load: " + adError.getErrorMessage());
                 if (mPopupListener != null)
-                    mPopupListener.OnShowFail();
+                    mPopupListener.OnClose();
             }
 
             @Override
@@ -102,7 +102,7 @@ public class FanManager extends AdsPlatform {
             public void onError(Ad ad, AdError error) {
                 // Rewarded video ad failed to load
                 AdsLog.i(TAG, "Rewarded video ad failed to load: " + error.getErrorMessage());
-                loadReward();
+                //loadReward();
             }
 
             @Override

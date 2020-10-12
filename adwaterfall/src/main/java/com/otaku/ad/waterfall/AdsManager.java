@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AdsManager implements IAdManager {
-    private final String TAG = "AD_DEBUG_" + getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     private boolean mEnableAd = true;
     private long mPreviousTime = 0;
     private boolean mShow = false;
@@ -180,6 +180,7 @@ public class AdsManager implements IAdManager {
 
                             @Override
                             public void OnShowFail() {
+                                AdsLog.i(TAG, "OnShowFail_0");
                                 mAdsPlatform.get(1).showPopup(new PopupAdsListener() {
                                     @Override
                                     public void OnClose() {
@@ -188,6 +189,7 @@ public class AdsManager implements IAdManager {
 
                                     @Override
                                     public void OnShowFail() {
+                                        AdsLog.i(TAG, "OnShowFail_1");
                                         listener.OnShowFail();
                                     }
                                 });
