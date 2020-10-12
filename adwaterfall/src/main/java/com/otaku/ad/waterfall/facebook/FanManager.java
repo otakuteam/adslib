@@ -20,7 +20,7 @@ import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 public class FanManager extends AdsPlatform {
     private final String TAG = getClass().getSimpleName();
@@ -56,13 +56,13 @@ public class FanManager extends AdsPlatform {
             @Override
             public void onInterstitialDisplayed(Ad ad) {
                 // Interstitial ad displayed callback
-                LogUtil.i(TAG, "Interstitial ad displayed.");
+                AdsLog.i(TAG, "Interstitial ad displayed.");
             }
 
             @Override
             public void onInterstitialDismissed(Ad ad) {
                 // Interstitial dismissed callback
-                LogUtil.i(TAG, "Interstitial ad dismissed.");
+                AdsLog.i(TAG, "Interstitial ad dismissed.");
                 if (mPopupListener != null)
                     mPopupListener.OnClose();
                 loadPopup();
@@ -71,7 +71,7 @@ public class FanManager extends AdsPlatform {
             @Override
             public void onError(Ad ad, AdError adError) {
                 // Ad error callback
-                LogUtil.i(TAG, "Interstitial ad failed to load: " + adError.getErrorMessage());
+                AdsLog.i(TAG, "Interstitial ad failed to load: " + adError.getErrorMessage());
                 if (mPopupListener != null)
                     mPopupListener.OnShowFail();
             }
@@ -79,19 +79,19 @@ public class FanManager extends AdsPlatform {
             @Override
             public void onAdLoaded(Ad ad) {
                 // Interstitial ad is loaded and ready to be displayed
-                LogUtil.i(TAG, "Interstitial ad is loaded and ready to be displayed!");
+                AdsLog.i(TAG, "Interstitial ad is loaded and ready to be displayed!");
             }
 
             @Override
             public void onAdClicked(Ad ad) {
                 // Ad clicked callback
-                LogUtil.i(TAG, "Interstitial ad clicked!");
+                AdsLog.i(TAG, "Interstitial ad clicked!");
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 // Ad impression logged callback
-                LogUtil.i(TAG, "Interstitial ad impression logged!");
+                AdsLog.i(TAG, "Interstitial ad impression logged!");
             }
         };
         loadPopup();
@@ -101,34 +101,34 @@ public class FanManager extends AdsPlatform {
             @Override
             public void onError(Ad ad, AdError error) {
                 // Rewarded video ad failed to load
-                LogUtil.i(TAG, "Rewarded video ad failed to load: " + error.getErrorMessage());
+                AdsLog.i(TAG, "Rewarded video ad failed to load: " + error.getErrorMessage());
                 loadReward();
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
                 // Rewarded video ad is loaded and ready to be displayed
-                LogUtil.i(TAG, "Rewarded video ad is loaded and ready to be displayed!");
+                AdsLog.i(TAG, "Rewarded video ad is loaded and ready to be displayed!");
             }
 
             @Override
             public void onAdClicked(Ad ad) {
                 // Rewarded video ad clicked
-                LogUtil.i(TAG, "Rewarded video ad clicked!");
+                AdsLog.i(TAG, "Rewarded video ad clicked!");
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 // Rewarded Video ad impression - the event will fire when the
                 // video starts playing
-                LogUtil.i(TAG, "Rewarded video ad impression logged!");
+                AdsLog.i(TAG, "Rewarded video ad impression logged!");
             }
 
             @Override
             public void onRewardedVideoCompleted() {
                 // Rewarded Video View Complete - the video has been played to the end.
                 // You can use this event to initialize your reward
-                LogUtil.i(TAG, "Rewarded video completed!");
+                AdsLog.i(TAG, "Rewarded video completed!");
                 if (mRewardAdListener != null)
                     mRewardAdListener.OnRewarded();
                 loadReward();
@@ -140,7 +140,7 @@ public class FanManager extends AdsPlatform {
             public void onRewardedVideoClosed() {
                 // The Rewarded Video ad was closed - this can occur during the video
                 // by closing the app, or closing the end card.
-                LogUtil.i(TAG, "Rewarded video ad closed!");
+                AdsLog.i(TAG, "Rewarded video ad closed!");
                 if (mRewardAdListener != null)
                     mRewardAdListener.OnClose();
                 loadReward();
@@ -172,23 +172,23 @@ public class FanManager extends AdsPlatform {
             @Override
             public void onError(Ad ad, AdError adError) {
                 listener.OnLoadFail();
-                LogUtil.i(TAG, "onError");
+                AdsLog.i(TAG, "onError");
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                LogUtil.i(TAG, "onAdLoaded");
+                AdsLog.i(TAG, "onAdLoaded");
 
             }
 
             @Override
             public void onAdClicked(Ad ad) {
-                LogUtil.i(TAG, "onAdClicked");
+                AdsLog.i(TAG, "onAdClicked");
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-                LogUtil.i(TAG, "onLoggingImpression");
+                AdsLog.i(TAG, "onLoggingImpression");
             }
         }).build());
 
@@ -200,12 +200,12 @@ public class FanManager extends AdsPlatform {
     @Override
     public void showPopup(PopupAdsListener listener) {
         mPopupListener = listener;
-        LogUtil.i(TAG, "showPopup");
+        AdsLog.i(TAG, "showPopup");
         if (popupAd != null && popupAd.isAdLoaded() && !popupAd.isAdInvalidated()) {
-            LogUtil.i(TAG, "showPopup ready");
+            AdsLog.i(TAG, "showPopup ready");
             popupAd.show();
         } else {
-            LogUtil.i(TAG, "showPopup fail");
+            AdsLog.i(TAG, "showPopup fail");
             if (mPopupListener != null) {
                 mPopupListener.OnShowFail();
             }
@@ -219,7 +219,7 @@ public class FanManager extends AdsPlatform {
         if (rewardedVideoAd != null && !rewardedVideoAd.isAdLoaded() && !rewardedVideoAd.isAdInvalidated()) {
             rewardedVideoAd.show();
         } else {
-            LogUtil.i(TAG, "showReward fail");
+            AdsLog.i(TAG, "showReward fail");
             if (mRewardAdListener != null) {
                 mRewardAdListener.OnShowFail();
             }

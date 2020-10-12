@@ -16,7 +16,7 @@ import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
 import com.otaku.ad.waterfall.mopub.MopubManager;
 import com.otaku.ad.waterfall.unity.UnityAdsManager;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void init(Context context, boolean testMode, AdModel... models) throws NotSupportPlatformException {
-        LogUtil.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mPref = context.getSharedPreferences("ads_config", Context.MODE_PRIVATE);
         mEnableAd = mPref.getBoolean(AdsConstants.PREF_ENABLE_AD, true);
         List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
@@ -64,7 +64,7 @@ public class AdsManager implements IAdManager {
         }
 
         for (int i = 0; i < waterFall.size(); i++) {
-            LogUtil.i(TAG, "waterfall: " + waterFall.get(i));
+            AdsLog.i(TAG, "waterfall: " + waterFall.get(i));
             mAdsPlatform.add(getAdsPlatformByName(waterFall.get(i), testMode));
         }
         for (AdsPlatform platform : mAdsPlatform) {
@@ -148,10 +148,10 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void showPopup(PopupAdsListener listener) {
-        LogUtil.i(TAG, "showPopup()");
+        AdsLog.i(TAG, "showPopup()");
         if (canShowPopup()) {
             try {
-                LogUtil.i(TAG, "mAdsPlatform size: " + mAdsPlatform.size());
+                AdsLog.i(TAG, "mAdsPlatform size: " + mAdsPlatform.size());
                 switch (mAdsPlatform.size()) {
                     case 1:
                         mAdsPlatform.get(0).showPopup(new PopupAdsListener() {
@@ -195,13 +195,13 @@ public class AdsManager implements IAdManager {
                         mAdsPlatform.get(0).showPopup(new PopupAdsListener() {
                             @Override
                             public void OnClose() {
-                                LogUtil.i(TAG, "OnClose");
+                                AdsLog.i(TAG, "OnClose");
                                 listener.OnClose();
                             }
 
                             @Override
                             public void OnShowFail() {
-                                LogUtil.i(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                AdsLog.i(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
                                 mAdsPlatform.get(1).showPopup(new PopupAdsListener() {
                                     @Override
                                     public void OnClose() {
@@ -210,7 +210,7 @@ public class AdsManager implements IAdManager {
 
                                     @Override
                                     public void OnShowFail() {
-                                        LogUtil.i(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                        AdsLog.i(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
                                         mAdsPlatform.get(2).showPopup(new PopupAdsListener() {
                                             @Override
                                             public void OnClose() {
@@ -275,7 +275,7 @@ public class AdsManager implements IAdManager {
                 }
 
             } catch (Exception e) {
-                LogUtil.e(TAG, e.getMessage());
+                AdsLog.e(TAG, e.getMessage());
                 listener.OnShowFail();
             }
         } else {
@@ -525,7 +525,7 @@ public class AdsManager implements IAdManager {
         else mShow = false;
         //check period to show
         long currentTime = System.currentTimeMillis();
-        LogUtil.i(TAG, "canShowPopup: " + mShow + " " + (currentTime - mPreviousTime));
+        AdsLog.i(TAG, "canShowPopup: " + mShow + " " + (currentTime - mPreviousTime));
         return (mEnableAd && mShow && (currentTime - mPreviousTime >= getLimitTime()));
     }
 

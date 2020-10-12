@@ -18,7 +18,7 @@ import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 
 public class AdmobAdsManager extends AdsPlatform {
@@ -91,7 +91,7 @@ public class AdmobAdsManager extends AdsPlatform {
             public void onRewarded(RewardItem rewardItem) {
                 if (adRewardListener != null)
                     adRewardListener.OnRewarded();
-                LogUtil.d(TAG, "onRewarded: " + rewardItem);
+                AdsLog.d(TAG, "onRewarded: " + rewardItem);
                 loadRewardAd();
             }
 
@@ -153,7 +153,7 @@ public class AdmobAdsManager extends AdsPlatform {
     @Override
     public void showPopup(PopupAdsListener listener) {
         adPopupListener = listener;
-        LogUtil.i(TAG, "showPopup");
+        AdsLog.i(TAG, "showPopup");
         if (canShowPopupAd(popupAd)) {
             isPopupReloaded = false; //Reset the reload-flag everytime showing an ad
             popupAd.show();

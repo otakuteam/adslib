@@ -10,7 +10,7 @@ import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
 import com.unity3d.services.banners.BannerErrorInfo;
@@ -35,46 +35,46 @@ public class UnityAdsManager extends AdsPlatform {
         UnityAds.addListener(new IUnityAdsListener() {
             @Override
             public void onUnityAdsReady(String s) {
-                LogUtil.i(TAG, "onUnityAdsReady " + s);
+                AdsLog.i(TAG, "onUnityAdsReady " + s);
 
             }
 
             @Override
             public void onUnityAdsStart(String s) {
-                LogUtil.i(TAG, "onUnityAdsStart " + s);
+                AdsLog.i(TAG, "onUnityAdsStart " + s);
 
             }
 
             @Override
             public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-                LogUtil.i(TAG, "onUnityAdsFinish " + s);
+                AdsLog.i(TAG, "onUnityAdsFinish " + s);
                 if (mAdModel.getPopupId().equals(s)) {
                     if (mPopupListener != null) {
                         mPopupListener.OnClose();
                     }
                 } else {
                     if (finishState == UnityAds.FinishState.COMPLETED) {
-                        LogUtil.i(TAG, "finishState completed");
+                        AdsLog.i(TAG, "finishState completed");
                         if (mRewardAdListener != null) {
                             mRewardAdListener.OnRewarded();
                         }
                         // Reward the user for watching the ad to completion.
                     } else if (finishState == UnityAds.FinishState.SKIPPED) {
                         // Do not reward the user for skipping the ad.
-                        LogUtil.i(TAG, "finishState skipped");
+                        AdsLog.i(TAG, "finishState skipped");
                         if (mRewardAdListener != null) {
                             mRewardAdListener.OnClose();
                         }
                     } else if (finishState == UnityAds.FinishState.ERROR) {
                         // Log an error.
-                        LogUtil.i(TAG, "finishState error");
+                        AdsLog.i(TAG, "finishState error");
                     }
                 }
             }
 
             @Override
             public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-                LogUtil.i(TAG, "onUnityAdsError " + s);
+                AdsLog.i(TAG, "onUnityAdsError " + s);
                 if (mPopupListener != null) {
                     mPopupListener.OnClose();
                 }
@@ -103,12 +103,12 @@ public class UnityAdsManager extends AdsPlatform {
     @Override
     public void showPopup(PopupAdsListener listener) {
         mPopupListener = listener;
-        LogUtil.i(TAG, "showPopup");
+        AdsLog.i(TAG, "showPopup");
         if (UnityAds.isReady(mAdModel.getPopupId())) {
-            LogUtil.i(TAG, "showPopup ready " + mAdModel.getPopupId());
+            AdsLog.i(TAG, "showPopup ready " + mAdModel.getPopupId());
             UnityAds.show(mActivity, mAdModel.getPopupId());
         } else {
-            LogUtil.i(TAG, "showPopup fail");
+            AdsLog.i(TAG, "showPopup fail");
             if (mPopupListener != null) {
                 mPopupListener.OnShowFail();
             }

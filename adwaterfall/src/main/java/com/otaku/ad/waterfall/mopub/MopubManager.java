@@ -21,7 +21,7 @@ import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 import java.util.Set;
 
@@ -50,17 +50,17 @@ public class MopubManager extends AdsPlatform {
         MoPub.initializeSdk(mActivity, configBuilder.build(), new SdkInitializationListener() {
             @Override
             public void onInitializationFinished() {
-                LogUtil.i(TAG, "onInitializationFinished");
+                AdsLog.i(TAG, "onInitializationFinished");
                 mInterstitial = new MoPubInterstitial(mActivity, mAdModel.getPopupId());
                 mInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
                     @Override
                     public void onInterstitialLoaded(MoPubInterstitial interstitial) {
-                        LogUtil.i(TAG, "popup_onInterstitialLoaded");
+                        AdsLog.i(TAG, "popup_onInterstitialLoaded");
                     }
 
                     @Override
                     public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
-                        LogUtil.i(TAG, "popup_onInterstitialFailed " + errorCode);
+                        AdsLog.i(TAG, "popup_onInterstitialFailed " + errorCode);
                         if (isPopupReloaded == false) {
                             isPopupReloaded = true;
                             mInterstitial.load();
@@ -69,17 +69,17 @@ public class MopubManager extends AdsPlatform {
 
                     @Override
                     public void onInterstitialShown(MoPubInterstitial interstitial) {
-                        LogUtil.i(TAG, "popup_onInterstitialShown");
+                        AdsLog.i(TAG, "popup_onInterstitialShown");
                     }
 
                     @Override
                     public void onInterstitialClicked(MoPubInterstitial interstitial) {
-                        LogUtil.i(TAG, "popup_onInterstitialClicked");
+                        AdsLog.i(TAG, "popup_onInterstitialClicked");
                     }
 
                     @Override
                     public void onInterstitialDismissed(MoPubInterstitial interstitial) {
-                        LogUtil.i(TAG, "popup_onInterstitialDismissed");
+                        AdsLog.i(TAG, "popup_onInterstitialDismissed");
                         if (mPopupListener != null)
                             mPopupListener.OnClose();
                         mInterstitial.load();
@@ -90,12 +90,12 @@ public class MopubManager extends AdsPlatform {
                 MoPubRewardedVideos.setRewardedVideoListener(new MoPubRewardedVideoListener() {
                     @Override
                     public void onRewardedVideoLoadSuccess(@NonNull String adUnitId) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoLoadSuccess");
+                        AdsLog.i(TAG, "reward_onRewardedVideoLoadSuccess");
                     }
 
                     @Override
                     public void onRewardedVideoLoadFailure(@NonNull String adUnitId, @NonNull MoPubErrorCode errorCode) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoLoadFailure");
+                        AdsLog.i(TAG, "reward_onRewardedVideoLoadFailure");
                         if (isRewardReloaded == false) {
                             isRewardReloaded = true;
                             MoPubRewardedVideos.loadRewardedVideo(mAdModel.getRewardId());
@@ -104,22 +104,22 @@ public class MopubManager extends AdsPlatform {
 
                     @Override
                     public void onRewardedVideoStarted(@NonNull String adUnitId) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoStarted");
+                        AdsLog.i(TAG, "reward_onRewardedVideoStarted");
                     }
 
                     @Override
                     public void onRewardedVideoPlaybackError(@NonNull String adUnitId, @NonNull MoPubErrorCode errorCode) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoPlaybackError");
+                        AdsLog.i(TAG, "reward_onRewardedVideoPlaybackError");
                     }
 
                     @Override
                     public void onRewardedVideoClicked(@NonNull String adUnitId) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoClicked");
+                        AdsLog.i(TAG, "reward_onRewardedVideoClicked");
                     }
 
                     @Override
                     public void onRewardedVideoClosed(@NonNull String adUnitId) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoClosed");
+                        AdsLog.i(TAG, "reward_onRewardedVideoClosed");
                         if (mRewardAdListener != null)
                             mRewardAdListener.OnClose();
                         MoPubRewardedVideos.loadRewardedVideo(mAdModel.getRewardId());
@@ -127,7 +127,7 @@ public class MopubManager extends AdsPlatform {
 
                     @Override
                     public void onRewardedVideoCompleted(@NonNull Set<String> adUnitIds, @NonNull MoPubReward reward) {
-                        LogUtil.i(TAG, "reward_onRewardedVideoCompleted");
+                        AdsLog.i(TAG, "reward_onRewardedVideoCompleted");
                         if (mRewardAdListener != null)
                             mRewardAdListener.OnRewarded();
                         MoPubRewardedVideos.loadRewardedVideo(mAdModel.getRewardId());
@@ -145,28 +145,28 @@ public class MopubManager extends AdsPlatform {
         moPubView.setBannerAdListener(new MoPubView.BannerAdListener() {
             @Override
             public void onBannerLoaded(@NonNull MoPubView banner) {
-                LogUtil.i(TAG, "onBannerLoaded");
+                AdsLog.i(TAG, "onBannerLoaded");
             }
 
             @Override
             public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
-                LogUtil.i(TAG, "onBannerFailed " + errorCode);
+                AdsLog.i(TAG, "onBannerFailed " + errorCode);
                 listener.OnLoadFail();
             }
 
             @Override
             public void onBannerClicked(MoPubView banner) {
-                LogUtil.i(TAG, "onBannerClicked");
+                AdsLog.i(TAG, "onBannerClicked");
             }
 
             @Override
             public void onBannerExpanded(MoPubView banner) {
-                LogUtil.i(TAG, "onBannerExpanded");
+                AdsLog.i(TAG, "onBannerExpanded");
             }
 
             @Override
             public void onBannerCollapsed(MoPubView banner) {
-                LogUtil.i(TAG, "onBannerCollapsed");
+                AdsLog.i(TAG, "onBannerCollapsed");
             }
         });
         moPubView.setAdUnitId(mAdModel.getBannerId());
@@ -180,13 +180,13 @@ public class MopubManager extends AdsPlatform {
     @Override
     public void showPopup(PopupAdsListener listener) {
         mPopupListener = listener;
-        LogUtil.i(TAG, "showPopup");
+        AdsLog.i(TAG, "showPopup");
         if (mInterstitial.isReady()) {
-            LogUtil.i(TAG, "showPopup ready");
+            AdsLog.i(TAG, "showPopup ready");
             isPopupReloaded = false; //Reset the reload-flag everytime showing an ad
             mInterstitial.show();
         } else {
-            LogUtil.i(TAG, "showPopup fail");
+            AdsLog.i(TAG, "showPopup fail");
             if (mPopupListener != null) {
                 mPopupListener.OnShowFail();
             }

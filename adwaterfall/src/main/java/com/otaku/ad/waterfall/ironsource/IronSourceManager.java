@@ -18,7 +18,7 @@ import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.util.LogUtil;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 public class IronSourceManager extends AdsPlatform {
     private final String TAG = getClass().getSimpleName();
@@ -48,7 +48,7 @@ public class IronSourceManager extends AdsPlatform {
              */
             @Override
             public void onInterstitialAdLoadFailed(IronSourceError error) {
-                LogUtil.i(TAG, "popup_onInterstitialFailed " + error);
+                AdsLog.i(TAG, "popup_onInterstitialFailed " + error);
                 if (isPopupReloaded == false) {
                     isPopupReloaded = true;
                     IronSource.loadInterstitial();
@@ -65,7 +65,7 @@ public class IronSourceManager extends AdsPlatform {
              */
             @Override
             public void onInterstitialAdClosed() {
-                LogUtil.i(TAG, "popup_onInterstitialDismissed");
+                AdsLog.i(TAG, "popup_onInterstitialDismissed");
                 if (mPopupListener != null)
                     mPopupListener.OnClose();
                 IronSource.loadInterstitial();
@@ -176,7 +176,7 @@ public class IronSourceManager extends AdsPlatform {
 
                 @Override
                 public void onBannerAdLoadFailed(IronSourceError error) {
-                    LogUtil.i(TAG, "onBannerAdLoadFailed");
+                    AdsLog.i(TAG, "onBannerAdLoadFailed");
                     listener.OnLoadFail();
                 }
 
@@ -212,13 +212,13 @@ public class IronSourceManager extends AdsPlatform {
     @Override
     public void showPopup(PopupAdsListener listener) {
         mPopupListener = listener;
-        LogUtil.i(TAG, "showPopup");
+        AdsLog.i(TAG, "showPopup");
         if (IronSource.isInterstitialReady()) {
-            LogUtil.i(TAG, "showPopup ready");
+            AdsLog.i(TAG, "showPopup ready");
             isPopupReloaded = false; //Reset the reload-flag everytime showing an ad
             IronSource.showInterstitial(mAdModel.getPopupId());
         } else {
-            LogUtil.i(TAG, "showPopup fail");
+            AdsLog.i(TAG, "showPopup fail");
             if (mPopupListener != null) {
                 mPopupListener.OnShowFail();
             }
