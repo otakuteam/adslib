@@ -72,8 +72,6 @@ public class FanManager extends AdsPlatform {
             public void onError(Ad ad, AdError adError) {
                 // Ad error callback
                 AdsLog.i(TAG, "Interstitial ad failed to load: " + adError.getErrorMessage());
-                if (mPopupListener != null)
-                    mPopupListener.OnClose();
             }
 
             @Override

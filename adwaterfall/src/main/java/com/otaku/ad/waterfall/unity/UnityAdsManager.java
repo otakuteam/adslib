@@ -75,9 +75,6 @@ public class UnityAdsManager extends AdsPlatform {
             @Override
             public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
                 AdsLog.i(TAG, "onUnityAdsError " + s);
-                if (mPopupListener != null) {
-                    mPopupListener.OnClose();
-                }
             }
         });
     }

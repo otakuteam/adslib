@@ -20,7 +20,7 @@ public class TestActivity extends AppCompatActivity {
         AdsManager.getInstance().showPopup(new PopupAdsListener() {
             @Override
             public void OnClose() {
-
+                Log.i("TEST__", "_test_OnClose");
             }
 
             @Override
