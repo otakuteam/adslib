@@ -291,178 +291,174 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void showReward(RewardAdListener listener) {
-        if (canShowReward()) {
-            try {
-                switch (mAdsPlatform.size()) {
-                    case 1:
-                        mAdsPlatform.get(0).showReward(new RewardAdListener() {
-                            @Override
-                            public void OnClose() {
-                                listener.OnClose();
-                            }
+        try {
+            switch (mAdsPlatform.size()) {
+                case 1:
+                    mAdsPlatform.get(0).showReward(new RewardAdListener() {
+                        @Override
+                        public void OnClose() {
+                            listener.OnClose();
+                        }
 
-                            @Override
-                            public void OnShowFail() {
-                                listener.OnShowFail();
-                            }
+                        @Override
+                        public void OnShowFail() {
+                            listener.OnShowFail();
+                        }
 
-                            @Override
-                            public void OnRewarded() {
-                                listener.OnRewarded();
-                            }
-                        });
-                        return;
-                    case 2:
-                        mAdsPlatform.get(0).showReward(new RewardAdListener() {
-                            @Override
-                            public void OnClose() {
-                                listener.OnClose();
-                            }
+                        @Override
+                        public void OnRewarded() {
+                            listener.OnRewarded();
+                        }
+                    });
+                    return;
+                case 2:
+                    mAdsPlatform.get(0).showReward(new RewardAdListener() {
+                        @Override
+                        public void OnClose() {
+                            listener.OnClose();
+                        }
 
-                            @Override
-                            public void OnShowFail() {
-                                mAdsPlatform.get(1).showReward(new RewardAdListener() {
-                                    @Override
-                                    public void OnClose() {
-                                        listener.OnClose();
-                                    }
+                        @Override
+                        public void OnShowFail() {
+                            mAdsPlatform.get(1).showReward(new RewardAdListener() {
+                                @Override
+                                public void OnClose() {
+                                    listener.OnClose();
+                                }
 
-                                    @Override
-                                    public void OnShowFail() {
-                                        listener.OnShowFail();
-                                    }
+                                @Override
+                                public void OnShowFail() {
+                                    listener.OnShowFail();
+                                }
 
-                                    @Override
-                                    public void OnRewarded() {
-                                        listener.OnRewarded();
-                                    }
-                                });
-                            }
+                                @Override
+                                public void OnRewarded() {
+                                    listener.OnRewarded();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void OnRewarded() {
-                                listener.OnRewarded();
-                            }
-                        });
-                        return;
-                    case 3:
-                        mAdsPlatform.get(0).showReward(new RewardAdListener() {
-                            @Override
-                            public void OnClose() {
-                                listener.OnClose();
-                            }
+                        @Override
+                        public void OnRewarded() {
+                            listener.OnRewarded();
+                        }
+                    });
+                    return;
+                case 3:
+                    mAdsPlatform.get(0).showReward(new RewardAdListener() {
+                        @Override
+                        public void OnClose() {
+                            listener.OnClose();
+                        }
 
-                            @Override
-                            public void OnShowFail() {
-                                mAdsPlatform.get(1).showReward(new RewardAdListener() {
-                                    @Override
-                                    public void OnClose() {
-                                        listener.OnClose();
-                                    }
+                        @Override
+                        public void OnShowFail() {
+                            mAdsPlatform.get(1).showReward(new RewardAdListener() {
+                                @Override
+                                public void OnClose() {
+                                    listener.OnClose();
+                                }
 
-                                    @Override
-                                    public void OnShowFail() {
-                                        mAdsPlatform.get(2).showReward(new RewardAdListener() {
-                                            @Override
-                                            public void OnClose() {
-                                                listener.OnClose();
-                                            }
+                                @Override
+                                public void OnShowFail() {
+                                    mAdsPlatform.get(2).showReward(new RewardAdListener() {
+                                        @Override
+                                        public void OnClose() {
+                                            listener.OnClose();
+                                        }
 
-                                            @Override
-                                            public void OnShowFail() {
-                                                listener.OnShowFail();
-                                            }
+                                        @Override
+                                        public void OnShowFail() {
+                                            listener.OnShowFail();
+                                        }
 
-                                            @Override
-                                            public void OnRewarded() {
-                                                listener.OnRewarded();
-                                            }
-                                        });
-                                    }
+                                        @Override
+                                        public void OnRewarded() {
+                                            listener.OnRewarded();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void OnRewarded() {
-                                        listener.OnRewarded();
-                                    }
-                                });
-                            }
+                                @Override
+                                public void OnRewarded() {
+                                    listener.OnRewarded();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void OnRewarded() {
-                                listener.OnRewarded();
-                            }
-                        });
-                        return;
-                    default:
-                        mAdsPlatform.get(0).showReward(new RewardAdListener() {
-                            @Override
-                            public void OnClose() {
-                                listener.OnClose();
-                            }
+                        @Override
+                        public void OnRewarded() {
+                            listener.OnRewarded();
+                        }
+                    });
+                    return;
+                default:
+                    mAdsPlatform.get(0).showReward(new RewardAdListener() {
+                        @Override
+                        public void OnClose() {
+                            listener.OnClose();
+                        }
 
-                            @Override
-                            public void OnShowFail() {
-                                mAdsPlatform.get(1).showReward(new RewardAdListener() {
-                                    @Override
-                                    public void OnClose() {
-                                        listener.OnClose();
-                                    }
+                        @Override
+                        public void OnShowFail() {
+                            mAdsPlatform.get(1).showReward(new RewardAdListener() {
+                                @Override
+                                public void OnClose() {
+                                    listener.OnClose();
+                                }
 
-                                    @Override
-                                    public void OnShowFail() {
-                                        mAdsPlatform.get(2).showReward(new RewardAdListener() {
-                                            @Override
-                                            public void OnClose() {
-                                                listener.OnClose();
-                                            }
+                                @Override
+                                public void OnShowFail() {
+                                    mAdsPlatform.get(2).showReward(new RewardAdListener() {
+                                        @Override
+                                        public void OnClose() {
+                                            listener.OnClose();
+                                        }
 
-                                            @Override
-                                            public void OnShowFail() {
-                                                mAdsPlatform.get(3).showReward(new RewardAdListener() {
-                                                    @Override
-                                                    public void OnClose() {
-                                                        listener.OnClose();
-                                                    }
+                                        @Override
+                                        public void OnShowFail() {
+                                            mAdsPlatform.get(3).showReward(new RewardAdListener() {
+                                                @Override
+                                                public void OnClose() {
+                                                    listener.OnClose();
+                                                }
 
-                                                    @Override
-                                                    public void OnShowFail() {
-                                                        listener.OnShowFail();
-                                                    }
+                                                @Override
+                                                public void OnShowFail() {
+                                                    listener.OnShowFail();
+                                                }
 
-                                                    @Override
-                                                    public void OnRewarded() {
-                                                        listener.OnRewarded();
-                                                    }
-                                                });
-                                            }
+                                                @Override
+                                                public void OnRewarded() {
+                                                    listener.OnRewarded();
+                                                }
+                                            });
+                                        }
 
-                                            @Override
-                                            public void OnRewarded() {
-                                                listener.OnRewarded();
-                                            }
-                                        });
-                                    }
+                                        @Override
+                                        public void OnRewarded() {
+                                            listener.OnRewarded();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void OnRewarded() {
-                                        listener.OnRewarded();
-                                    }
-                                });
-                            }
+                                @Override
+                                public void OnRewarded() {
+                                    listener.OnRewarded();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void OnRewarded() {
-                                listener.OnRewarded();
-                            }
-                        });
-                        return;
-                }
-            } catch (Exception e) {
-                listener.OnShowFail();
-                //LogUtil.e(TAG, e.getMessage());
+                        @Override
+                        public void OnRewarded() {
+                            listener.OnRewarded();
+                        }
+                    });
+                    return;
             }
-        } else {
+        } catch (Exception e) {
             listener.OnShowFail();
+            //LogUtil.e(TAG, e.getMessage());
         }
     }
 
@@ -538,10 +534,6 @@ public class AdsManager implements IAdManager {
         long currentTime = System.currentTimeMillis();
         AdsLog.i(TAG, "canShowPopup: " + mShow + " " + (currentTime - mPreviousTime));
         return (mEnableAd && mShow && (currentTime - mPreviousTime >= getLimitTime()));
-    }
-
-    private boolean canShowReward() {
-        return mEnableAd;
     }
 
     private long getLimitTime() {
