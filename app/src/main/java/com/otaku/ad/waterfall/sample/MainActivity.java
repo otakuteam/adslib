@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             AdsManager.getInstance().init(this, true,
-                    new AdModel(AdsConstants.UNITY,
+                    new AdModel(AdsConstants.ADMOB,
                             "ca-app-pub-3940256099942544~3347511713",
                             "ca-app-pub-3940256099942544/6300978111",
                             "ca-app-pub-3940256099942544/1033173712",
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (NotSupportPlatformException e) {
             e.printStackTrace();
         }
+        AdsManager.getInstance().setLimitTime(40);
 
         ((Button) findViewById(R.id.btn_test)).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,7 +1,6 @@
 package com.otaku.ad.waterfall;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.view.ViewGroup;
 
@@ -17,6 +16,7 @@ import com.otaku.ad.waterfall.model.AdModel;
 import com.otaku.ad.waterfall.mopub.MopubManager;
 import com.otaku.ad.waterfall.unity.UnityAdsManager;
 import com.otaku.ad.waterfall.util.AdsLog;
+import com.otaku.ad.waterfall.util.AdsPreferenceUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ public class AdsManager implements IAdManager {
     private boolean mEnableAd = true;
     private long mPreviousTime = 0;
     private boolean mShow = false;
-    private SharedPreferences mPref;
     private ArrayList<AdsPlatform> mAdsPlatform = new ArrayList<>();
     private Context mContext;
 
@@ -48,9 +47,9 @@ public class AdsManager implements IAdManager {
     @Override
     public void init(Context context, boolean testMode, AdModel... models) throws NotSupportPlatformException {
         mContext = context;
+        AdsPreferenceUtil.getInstance().init(context);
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
-        mPref = context.getSharedPreferences("ads_config", Context.MODE_PRIVATE);
-        mEnableAd = mPref.getBoolean(AdsConstants.PREF_ENABLE_AD, true);
+        mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
         List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
                 AdsConstants.FACEBOOK, AdsConstants.MOPUB, AdsConstants.IRONSOURCE});
         ArrayList<String> waterFall = getWaterfall();
@@ -73,6 +72,10 @@ public class AdsManager implements IAdManager {
             for (AdsPlatform platform : mAdsPlatform) {
                 platform.init(context, testMode);
             }
+        }
+
+        for (AdsPlatform platform : mAdsPlatform) {
+            AdsLog.i(TAG, "log_platform" + platform.mAdModel.getName());
         }
     }
 
@@ -464,25 +467,27 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void setLimitTime(long limitTime) {
-        mPref.edit().putLong(AdsConstants.PREF_AD_TIME, limitTime);
+        AdsLog.i(TAG, "setLimitTime: " + limitTime);
+        AdsPreferenceUtil.getInstance().putLong(AdsConstants.PREF_AD_TIME, limitTime);
+        AdsLog.i(TAG, "setLimitTime: " + AdsPreferenceUtil.getInstance().getLong(AdsConstants.PREF_AD_TIME, -1));
     }
 
     @Override
     public void enableAd() {
         mEnableAd = true;
-        mPref.edit().putBoolean(AdsConstants.PREF_ENABLE_AD, mEnableAd);
+        AdsPreferenceUtil.getInstance().putBoolean(AdsConstants.PREF_ENABLE_AD, mEnableAd);
     }
 
     @Override
     public void muteAdsForever() {
         mEnableAd = false;
-        mPref.edit().putBoolean(AdsConstants.PREF_ENABLE_AD, mEnableAd);
+        AdsPreferenceUtil.getInstance().putBoolean(AdsConstants.PREF_ENABLE_AD, mEnableAd);
     }
 
     @Override
     public AdModel getAdModelByName(String name) {
         Gson gson = new Gson();
-        String json = mPref.getString(name, null);
+        String json = AdsPreferenceUtil.getInstance().getString(name, null);
         Type type = new TypeToken<AdModel>() {
         }.getType();
         if (json != null) {
@@ -495,15 +500,13 @@ public class AdsManager implements IAdManager {
     public void saveAdModel(AdModel adModel) {
         Gson gson = new Gson();
         String json = gson.toJson(adModel);
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putString(adModel.getName(), json);
-        editor.apply();
+        AdsPreferenceUtil.getInstance().putString(adModel.getName(), json);
     }
 
     @Override
     public ArrayList<String> getWaterfall() {
         Gson gson = new Gson();
-        String json = mPref.getString(AdsConstants.PREF_AD_WATERFALL, null);
+        String json = AdsPreferenceUtil.getInstance().getString(AdsConstants.PREF_AD_WATERFALL, null);
         Type type = new TypeToken<ArrayList<String>>() {
         }.getType();
         if (json != null)
@@ -515,9 +518,7 @@ public class AdsManager implements IAdManager {
     public void saveWaterFall(ArrayList<String> inputPlatforms) {
         Gson gson = new Gson();
         String json = gson.toJson(inputPlatforms);
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putString(AdsConstants.PREF_AD_WATERFALL, json);
-        editor.apply();
+        AdsPreferenceUtil.getInstance().putString(AdsConstants.PREF_AD_WATERFALL, json);
     }
 
 
@@ -532,12 +533,12 @@ public class AdsManager implements IAdManager {
         else mShow = false;
         //check period to show
         long currentTime = System.currentTimeMillis();
-        AdsLog.i(TAG, "canShowPopup: " + mShow + " " + (currentTime - mPreviousTime));
-        return (mEnableAd && mShow && (currentTime - mPreviousTime >= getLimitTime()));
+        AdsLog.i(TAG, "canShowPopup: " + mShow + " " + getLimitTime() + " " + (currentTime - mPreviousTime));
+        return mEnableAd && mShow && (currentTime - mPreviousTime >= getLimitTime());
     }
 
     private long getLimitTime() {
-        long interval = mPref.getLong(AdsConstants.PREF_AD_TIME, -1); //in second
+        long interval = AdsPreferenceUtil.getInstance().getLong(AdsConstants.PREF_AD_TIME, -1); //in second
         return interval * 1000;
     }
 
