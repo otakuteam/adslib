@@ -21,57 +21,66 @@ public class AdsPreferenceUtil {
 
     public void init(Context context) {
         mSharedPreferences = context.getSharedPreferences("ads_config", Context.MODE_PRIVATE);
-        mEditor = mSharedPreferences.edit();
-    }
-
-    public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(listener);
-    }
-
-    public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(listener);
+        if (mSharedPreferences != null)
+            mEditor = mSharedPreferences.edit();
     }
 
     public void putString(String key, String value) {
-        mEditor.putString(key, value);
-        mEditor.commit();
+        if (mEditor != null) {
+            mEditor.putString(key, value);
+            mEditor.commit();
+        }
     }
 
     public void putInt(String key, int value) {
-        mEditor.putInt(key, value);
-        mEditor.commit();
+        if (mEditor != null) {
+            mEditor.putInt(key, value);
+            mEditor.commit();
+        }
     }
 
     public void putLong(String key, long value) {
-        mEditor.putLong(key, value);
-        mEditor.commit();
+        if (mEditor != null) {
+            mEditor.putLong(key, value);
+            mEditor.commit();
+        }
     }
 
     public void putBoolean(String key, boolean value) {
-        mEditor.putBoolean(key, value);
-        mEditor.commit();
+        if (mEditor != null) {
+            mEditor.putBoolean(key, value);
+            mEditor.commit();
+        }
     }
 
     public String getString(String key, String defVal) {
-        return mSharedPreferences.getString(key, defVal);
+        if (mSharedPreferences != null)
+            return mSharedPreferences.getString(key, defVal);
+        return defVal;
     }
 
     public int getInt(String key, int defVal) {
-        return mSharedPreferences.getInt(key, defVal);
+        if (mSharedPreferences != null)
+            return mSharedPreferences.getInt(key, defVal);
+        return defVal;
     }
 
     public long getLong(String key, long defVal) {
-        return mSharedPreferences.getLong(key, defVal);
+        if (mSharedPreferences != null)
+            return mSharedPreferences.getLong(key, defVal);
+        return defVal;
     }
 
     public boolean getBoolean(String key, boolean defVal) {
-        return mSharedPreferences.getBoolean(key, defVal);
+        if (mSharedPreferences != null)
+            return mSharedPreferences.getBoolean(key, defVal);
+        return defVal;
     }
 
     public boolean getBoolean(String key) {
-        return mSharedPreferences.getBoolean(key, false);
+        if (mSharedPreferences != null)
+            return mSharedPreferences.getBoolean(key, false);
+        return false;
     }
-
-
 }
 

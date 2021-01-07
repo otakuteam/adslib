@@ -30,6 +30,7 @@ public class AdsManager implements IAdManager {
     private boolean mShow = false;
     private ArrayList<AdsPlatform> mAdsPlatform = new ArrayList<>();
     private Context mContext;
+    private long mLimitTime = 15;
 
     private AdsManager() {
     }
@@ -468,6 +469,7 @@ public class AdsManager implements IAdManager {
     @Override
     public void setLimitTime(long limitTime) {
         AdsLog.i(TAG, "setLimitTime: " + limitTime);
+        mLimitTime = limitTime;
         AdsPreferenceUtil.getInstance().putLong(AdsConstants.PREF_AD_TIME, limitTime);
         AdsLog.i(TAG, "setLimitTime: " + AdsPreferenceUtil.getInstance().getLong(AdsConstants.PREF_AD_TIME, -1));
     }
@@ -538,7 +540,7 @@ public class AdsManager implements IAdManager {
     }
 
     private long getLimitTime() {
-        long interval = AdsPreferenceUtil.getInstance().getLong(AdsConstants.PREF_AD_TIME, -1); //in second
+        long interval = AdsPreferenceUtil.getInstance().getLong(AdsConstants.PREF_AD_TIME, mLimitTime); //in second
         return interval * 1000;
     }
 
