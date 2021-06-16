@@ -114,6 +114,7 @@ public class UnityAdsManager extends AdsPlatform {
 
     @Override
     public void showReward(RewardAdListener listener) {
+        AdsLog.i(TAG, "showReward");
         mRewardAdListener = listener;
         if (UnityAds.isReady(mAdModel.getRewardId())) {
             UnityAds.show(mActivity, mAdModel.getRewardId());
