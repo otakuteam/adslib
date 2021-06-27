@@ -8,12 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otaku.ad.waterfall.admob.AdmobAdsManager;
 import com.otaku.ad.waterfall.facebook.FanManager;
-import com.otaku.ad.waterfall.ironsource.IronSourceManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
-import com.otaku.ad.waterfall.mopub.MopubManager;
 import com.otaku.ad.waterfall.unity.UnityAdsManager;
 import com.otaku.ad.waterfall.util.AdsLog;
 import com.otaku.ad.waterfall.util.AdsPreferenceUtil;
@@ -52,7 +50,7 @@ public class AdsManager implements IAdManager {
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
         List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
-                AdsConstants.FACEBOOK, AdsConstants.MOPUB, AdsConstants.IRONSOURCE});
+                AdsConstants.FACEBOOK});
         ArrayList<String> waterFall = getWaterfall();
         if (waterFall == null || waterFall.isEmpty()) {
             waterFall = new ArrayList<>();
@@ -565,24 +563,6 @@ public class AdsManager implements IAdManager {
                     );
                 }
                 return new UnityAdsManager(adModel);
-            case AdsConstants.MOPUB:
-                if (adModel == null) {
-                    adModel = new AdModel(AdsConstants.MOPUB, mContext.getString(R.string.app_id),
-                            mContext.getString(R.string.banner_id),
-                            mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
-                    );
-                }
-                return new MopubManager(adModel);
-            case AdsConstants.IRONSOURCE:
-                if (adModel == null) {
-                    adModel = new AdModel(AdsConstants.IRONSOURCE, mContext.getString(R.string.app_id),
-                            mContext.getString(R.string.banner_id),
-                            mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
-                    );
-                }
-                return new IronSourceManager(adModel);
             case AdsConstants.FACEBOOK:
                 if (adModel == null) {
                     adModel = new AdModel(AdsConstants.FACEBOOK, mContext.getString(R.string.app_id),
