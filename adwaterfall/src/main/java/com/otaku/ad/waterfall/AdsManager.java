@@ -300,6 +300,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnClose() {
                             listener.OnClose();
+                            mPreviousTime = System.currentTimeMillis();
                         }
 
                         @Override
@@ -319,6 +320,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnClose() {
                             listener.OnClose();
+                            mPreviousTime = System.currentTimeMillis();
                         }
 
                         @Override
@@ -327,6 +329,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnClose() {
                                     listener.OnClose();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
 
                                 @Override
@@ -354,6 +357,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnClose() {
                             listener.OnClose();
+                            mPreviousTime = System.currentTimeMillis();
                         }
 
                         @Override
@@ -362,6 +366,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnClose() {
                                     listener.OnClose();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
 
                                 @Override
@@ -370,6 +375,7 @@ public class AdsManager implements IAdManager {
                                         @Override
                                         public void OnClose() {
                                             listener.OnClose();
+                                            mPreviousTime = System.currentTimeMillis();
                                         }
 
                                         @Override
@@ -405,6 +411,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnClose() {
                             listener.OnClose();
+                            mPreviousTime = System.currentTimeMillis();
                         }
 
                         @Override
@@ -413,6 +420,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnClose() {
                                     listener.OnClose();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
 
                                 @Override
@@ -421,6 +429,7 @@ public class AdsManager implements IAdManager {
                                         @Override
                                         public void OnClose() {
                                             listener.OnClose();
+                                            mPreviousTime = System.currentTimeMillis();
                                         }
 
                                         @Override
@@ -429,6 +438,7 @@ public class AdsManager implements IAdManager {
                                                 @Override
                                                 public void OnClose() {
                                                     listener.OnClose();
+                                                    mPreviousTime = System.currentTimeMillis();
                                                 }
 
                                                 @Override
