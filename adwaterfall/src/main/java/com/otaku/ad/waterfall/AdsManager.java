@@ -310,6 +310,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnRewarded() {
                             listener.OnRewarded();
+                            mPreviousTime = System.currentTimeMillis();
                         }
                     });
                     return;
@@ -336,6 +337,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnRewarded() {
                                     listener.OnRewarded();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
                             });
                         }
@@ -343,6 +345,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnRewarded() {
                             listener.OnRewarded();
+                            mPreviousTime = System.currentTimeMillis();
                         }
                     });
                     return;
@@ -377,6 +380,7 @@ public class AdsManager implements IAdManager {
                                         @Override
                                         public void OnRewarded() {
                                             listener.OnRewarded();
+                                            mPreviousTime = System.currentTimeMillis();
                                         }
                                     });
                                 }
@@ -384,6 +388,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnRewarded() {
                                     listener.OnRewarded();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
                             });
                         }
@@ -391,6 +396,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnRewarded() {
                             listener.OnRewarded();
+                            mPreviousTime = System.currentTimeMillis();
                         }
                     });
                     return;
@@ -433,6 +439,7 @@ public class AdsManager implements IAdManager {
                                                 @Override
                                                 public void OnRewarded() {
                                                     listener.OnRewarded();
+                                                    mPreviousTime = System.currentTimeMillis();
                                                 }
                                             });
                                         }
@@ -440,6 +447,7 @@ public class AdsManager implements IAdManager {
                                         @Override
                                         public void OnRewarded() {
                                             listener.OnRewarded();
+                                            mPreviousTime = System.currentTimeMillis();
                                         }
                                     });
                                 }
@@ -447,6 +455,7 @@ public class AdsManager implements IAdManager {
                                 @Override
                                 public void OnRewarded() {
                                     listener.OnRewarded();
+                                    mPreviousTime = System.currentTimeMillis();
                                 }
                             });
                         }
@@ -454,6 +463,7 @@ public class AdsManager implements IAdManager {
                         @Override
                         public void OnRewarded() {
                             listener.OnRewarded();
+                            mPreviousTime = System.currentTimeMillis();
                         }
                     });
                     return;
