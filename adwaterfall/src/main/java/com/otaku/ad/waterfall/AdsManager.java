@@ -24,7 +24,7 @@ public class AdsManager implements IAdManager {
     private final String TAG = getClass().getSimpleName();
     private boolean mEnableAd = true;
     private long mPreviousTime = 0;
-    private boolean mShow = false;
+    private boolean mShowPopup = false;
     private ArrayList<AdsPlatform> mAdsPlatform = new ArrayList<>();
     private Context mContext;
     private long mLimitTime = 15;
@@ -299,6 +299,7 @@ public class AdsManager implements IAdManager {
                         public void OnClose() {
                             listener.OnClose();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
 
                         @Override
@@ -310,6 +311,7 @@ public class AdsManager implements IAdManager {
                         public void OnRewarded() {
                             listener.OnRewarded();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
                     });
                     return;
@@ -319,6 +321,7 @@ public class AdsManager implements IAdManager {
                         public void OnClose() {
                             listener.OnClose();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
 
                         @Override
@@ -328,6 +331,7 @@ public class AdsManager implements IAdManager {
                                 public void OnClose() {
                                     listener.OnClose();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
 
                                 @Override
@@ -339,6 +343,7 @@ public class AdsManager implements IAdManager {
                                 public void OnRewarded() {
                                     listener.OnRewarded();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
                             });
                         }
@@ -347,6 +352,7 @@ public class AdsManager implements IAdManager {
                         public void OnRewarded() {
                             listener.OnRewarded();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
                     });
                     return;
@@ -356,6 +362,7 @@ public class AdsManager implements IAdManager {
                         public void OnClose() {
                             listener.OnClose();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
 
                         @Override
@@ -365,6 +372,7 @@ public class AdsManager implements IAdManager {
                                 public void OnClose() {
                                     listener.OnClose();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
 
                                 @Override
@@ -374,6 +382,7 @@ public class AdsManager implements IAdManager {
                                         public void OnClose() {
                                             listener.OnClose();
                                             mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup = true;
                                         }
 
                                         @Override
@@ -385,6 +394,7 @@ public class AdsManager implements IAdManager {
                                         public void OnRewarded() {
                                             listener.OnRewarded();
                                             mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup = true;
                                         }
                                     });
                                 }
@@ -393,6 +403,7 @@ public class AdsManager implements IAdManager {
                                 public void OnRewarded() {
                                     listener.OnRewarded();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
                             });
                         }
@@ -401,6 +412,7 @@ public class AdsManager implements IAdManager {
                         public void OnRewarded() {
                             listener.OnRewarded();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
                     });
                     return;
@@ -410,6 +422,7 @@ public class AdsManager implements IAdManager {
                         public void OnClose() {
                             listener.OnClose();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
 
                         @Override
@@ -419,6 +432,7 @@ public class AdsManager implements IAdManager {
                                 public void OnClose() {
                                     listener.OnClose();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
 
                                 @Override
@@ -428,6 +442,7 @@ public class AdsManager implements IAdManager {
                                         public void OnClose() {
                                             listener.OnClose();
                                             mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup = true;
                                         }
 
                                         @Override
@@ -437,6 +452,7 @@ public class AdsManager implements IAdManager {
                                                 public void OnClose() {
                                                     listener.OnClose();
                                                     mPreviousTime = System.currentTimeMillis();
+                                                    mShowPopup = true;
                                                 }
 
                                                 @Override
@@ -448,6 +464,7 @@ public class AdsManager implements IAdManager {
                                                 public void OnRewarded() {
                                                     listener.OnRewarded();
                                                     mPreviousTime = System.currentTimeMillis();
+                                                    mShowPopup = true;
                                                 }
                                             });
                                         }
@@ -456,6 +473,7 @@ public class AdsManager implements IAdManager {
                                         public void OnRewarded() {
                                             listener.OnRewarded();
                                             mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup = true;
                                         }
                                     });
                                 }
@@ -464,6 +482,7 @@ public class AdsManager implements IAdManager {
                                 public void OnRewarded() {
                                     listener.OnRewarded();
                                     mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup = true;
                                 }
                             });
                         }
@@ -472,6 +491,7 @@ public class AdsManager implements IAdManager {
                         public void OnRewarded() {
                             listener.OnRewarded();
                             mPreviousTime = System.currentTimeMillis();
+                            mShowPopup = true;
                         }
                     });
                     return;
@@ -547,12 +567,12 @@ public class AdsManager implements IAdManager {
 
     private boolean canShowPopup() {
         //prevent show 2 time continuously
-        if (!mShow) mShow = true;
-        else mShow = false;
+        if (!mShowPopup) mShowPopup = true;
+        else mShowPopup = false;
         //check period to show
         long currentTime = System.currentTimeMillis();
-        AdsLog.i(TAG, "canShowPopup: " + mShow + " " + getLimitTime() + " " + (currentTime - mPreviousTime));
-        return mEnableAd && mShow && (currentTime - mPreviousTime >= getLimitTime());
+        AdsLog.i(TAG, "canShowPopup: " + mShowPopup + " " + getLimitTime() + " " + (currentTime - mPreviousTime));
+        return mEnableAd && mShowPopup && (currentTime - mPreviousTime >= getLimitTime());
     }
 
     private long getLimitTime() {
