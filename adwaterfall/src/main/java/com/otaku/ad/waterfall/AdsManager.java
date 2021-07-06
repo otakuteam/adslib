@@ -6,8 +6,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.otaku.ad.waterfall.admob.AdmobAdsManager;
-import com.otaku.ad.waterfall.facebook.FanManager;
+import com.otaku.ad.waterfall.appodeal.AppodealAdsManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
@@ -49,8 +48,7 @@ public class AdsManager implements IAdManager {
         AdsPreferenceUtil.getInstance().init(context);
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
-        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
-                AdsConstants.FACEBOOK});
+        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.UNITY, AdsConstants.APPODEAL});
         ArrayList<String> waterFall = getWaterfall();
         if (waterFall == null || waterFall.isEmpty()) {
             waterFall = new ArrayList<>();
@@ -565,15 +563,6 @@ public class AdsManager implements IAdManager {
     private AdsPlatform getAdsPlatformByName(String name, boolean testMode) {
         AdModel adModel = getAdModelByName(name);
         switch (name) {
-            case AdsConstants.ADMOB:
-                if (adModel == null) {
-                    adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
-                            mContext.getString(R.string.banner_id),
-                            mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
-                    );
-                }
-                return new AdmobAdsManager(adModel);
             case AdsConstants.UNITY:
                 if (adModel == null) {
                     adModel = new AdModel(AdsConstants.UNITY, mContext.getString(R.string.app_id),
@@ -583,24 +572,24 @@ public class AdsManager implements IAdManager {
                     );
                 }
                 return new UnityAdsManager(adModel);
-            case AdsConstants.FACEBOOK:
+            case AdsConstants.APPODEAL:
                 if (adModel == null) {
-                    adModel = new AdModel(AdsConstants.FACEBOOK, mContext.getString(R.string.app_id),
+                    adModel = new AdModel(AdsConstants.APPODEAL, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
                             mContext.getString(R.string.reward_id)
                     );
                 }
-                return new FanManager(adModel);
+                return new AppodealAdsManager(adModel);
             default:
                 if (adModel == null) {
-                    adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
+                    adModel = new AdModel(AdsConstants.UNITY, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
                             mContext.getString(R.string.reward_id)
                     );
                 }
-                return new AdmobAdsManager(adModel);
+                return new UnityAdsManager(adModel);
         }
     }
 }

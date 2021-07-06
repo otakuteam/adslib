@@ -36,30 +36,31 @@ public class MainActivity extends AppCompatActivity {
 //                            "ca-app-pub-3940256099942544/6300978111",
 //                            "ca-app-pub-3940256099942544/1033173712",
 //                            "ca-app-pub-3940256099942544/5224354917")
-                    new AdModel(AdsConstants.UNITY,
-                            "3617642",
-                            "banner",
-                            "video",
-                            "rewardedVideo")
+//                    new AdModel(AdsConstants.UNITY,
+//                            "3617642",
+//                            "banner",
+//                            "video",
+//                            "rewardedVideo"),
+                    new AdModel(AdsConstants.APPODEAL,
+                            "006b8405d43949f321184c3e029b7f3337d99fa75381776d",
+                            "",
+                            "",
+                            "")
             );
         } catch (NotSupportPlatformException e) {
             e.printStackTrace();
         }
-        AdsManager.getInstance().setLimitTime(40);
-        ArrayList<String> waterfall = new ArrayList<>();
-        waterfall.add("admob");
-        waterfall.add("unity");
-        AdsManager.getInstance().saveWaterFall(waterfall);
-        AdsManager.getInstance().saveAdModel( new AdModel(AdsConstants.ADMOB,
-                "ca-app-pub",
-                "ca-app-pub",
-                "ca-app-pub-3940256099942544/",
-                "ca-app-pub-3940256099942544/"));
-        AdsManager.getInstance().saveAdModel(new AdModel(AdsConstants.UNITY,
-                "3617642",
-                "banner",
-                "video",
-                "rewardedVideo"));
+//        AdsManager.getInstance().setLimitTime(40);
+        //ArrayList<String> waterfall = new ArrayList<>();
+       // waterfall.add("admob");
+//        waterfall.add("unity");
+//        AdsManager.getInstance().saveWaterFall(waterfall);
+//
+//        AdsManager.getInstance().saveAdModel(new AdModel(AdsConstants.UNITY,
+//                "3617642",
+//                "banner",
+//                "video",
+//                "rewardedVideo"));
 
         ((Button) findViewById(R.id.btn_test)).setOnClickListener(new View.OnClickListener() {
             @Override
