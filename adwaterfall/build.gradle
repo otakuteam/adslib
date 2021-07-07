@@ -44,11 +44,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     //appodeal
-    implementation ('com.appodeal.ads:sdk:2.10.1.+') {
-        exclude group: 'com.appodeal.ads.sdk.networks', module: 'appodeal'
-        exclude group: 'com.appodeal.ads.sdk.networks', module: 'nast'
-        exclude group: 'com.appodeal.ads.sdk.networks', module: 'admob'
-        exclude group: 'com.appodeal.ads.sdk.networks', module: 'unity'
-    }
+    implementation 'com.appodeal.ads:sdk:2.10.1.+'
 }
 
