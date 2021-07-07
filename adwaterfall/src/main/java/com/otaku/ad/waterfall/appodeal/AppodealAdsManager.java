@@ -34,8 +34,8 @@ public class AppodealAdsManager extends AdsPlatform {
         mActivity = (Activity) context;
         Appodeal.disableLocationPermissionCheck(); //To disable toast message "ACCESS_COARSE_LOCATION permission is missing"
         Appodeal.initialize(mActivity, mAdModel.getAppId(), Appodeal.BANNER | Appodeal.INTERSTITIAL | Appodeal.REWARDED_VIDEO, false);
-        //Appodeal.setTesting(testMode);
-        Appodeal.setLogLevel(Log.LogLevel.verbose);
+        Appodeal.setTesting(testMode);
+        Appodeal.setLogLevel(Log.LogLevel.none);
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
             @Override
             public void onBannerLoaded(int i, boolean b) {

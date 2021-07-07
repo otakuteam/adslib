@@ -6,7 +6,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 11
-        versionName "1.11.2"
+        versionName "1.11.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -42,13 +42,13 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.6'
-    
-    //unity
-    implementation 'com.unity3d.ads:unity-ads:3.4.8'
+
     //appodeal
     implementation ('com.appodeal.ads:sdk:2.10.1.+') {
         exclude group: 'com.appodeal.ads.sdk.networks', module: 'appodeal'
         exclude group: 'com.appodeal.ads.sdk.networks', module: 'nast'
+        exclude group: 'com.appodeal.ads.sdk.networks', module: 'admob'
+        exclude group: 'com.appodeal.ads.sdk.networks', module: 'unity'
     }
 }
 
