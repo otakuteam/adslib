@@ -4,13 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
@@ -138,15 +139,22 @@ public class InhouseAdsManager extends AdsPlatform {
             Random random = new Random();
             File file = files[random.nextInt(files.length)];
             if ("png".equals(getFileExtension(file))) {
+                int height = (int) (50 * ((float) mContext.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
                 ImageView adView = new ImageView(mContext);
-                int width = 320;
-                int height = 50;
-                LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height);
-                adView.setLayoutParams(parms);
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams vp =
+                        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                height);
+                adView.setLayoutParams(vp);
+                //adView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                adView.setImageBitmap(bitmap);
+                AdsLog.d(TAG, "show_banner: " + adView.getWidth() + " " + adView.getHeight());
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
                 params.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 banner.addView(adView, params);
-                Glide.with(mContext).load(file).apply(new RequestOptions().centerCrop()).into(adView);
+                AdsLog.d(TAG, "show_banner: " + adView.getWidth() + " " + adView.getHeight());
+
+                AdsLog.d(TAG, "show_banner: " + adView.getWidth() + " " + adView.getHeight());
             } else {
                 listener.OnLoadFail();
             }

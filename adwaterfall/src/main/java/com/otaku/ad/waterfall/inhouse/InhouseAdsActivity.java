@@ -3,6 +3,7 @@ package com.otaku.ad.waterfall.inhouse;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
@@ -20,8 +21,6 @@ import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.otaku.ad.waterfall.R;
 
 import java.io.File;
@@ -113,7 +112,8 @@ public class InhouseAdsActivity extends AppCompatActivity {
             imageView.setVisibility(View.VISIBLE);
             videoView.setVisibility(View.GONE);
             counter.setVisibility(View.GONE);
-            Glide.with(this).load(resourcePath).apply(new RequestOptions().centerCrop()).into(imageView);
+            Bitmap bitmap = BitmapFactory.decodeFile(resourcePath);
+            imageView.setImageBitmap(bitmap);
         } else if (adsType == InhouseAds.REWARD) {
             //imageView.setVisibility(View.GONE);
             btnClose.setVisibility(View.GONE);
@@ -147,7 +147,7 @@ public class InhouseAdsActivity extends AppCompatActivity {
             videoView.setVisibility(View.VISIBLE);
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(resourcePath,
                     MediaStore.Images.Thumbnails.MINI_KIND);
-            Glide.with(this).load(thumb).apply(new RequestOptions().centerCrop()).into(imageView);
+            imageView.setImageBitmap(thumb);
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoPath(resourcePath);
             videoView.requestFocus();

@@ -39,12 +39,12 @@ public class SplashActivity extends AppCompatActivity {
                             "[\n" +
                                     "  {\n" +
                                     "    \"id\": \"1\",\n" +
-                                    "    \"resource\": \"https://i.pinimg.com/564x/26/a7/6d/26a76dbc138c4f1f79e2b8c7924462aa.jpg\",\n" +
+                                    "    \"resource\": \"https://i.stack.imgur.com/PN9QJ.png\",\n" +
                                     "    \"action\": \"https://play.google.com/store/apps/details?id=com.roblox.client\"\n" +
                                     "  },\n" +
                                     "  {\n" +
                                     "    \"id\": \"2\",\n" +
-                                    "    \"resource\": \"https://i.pinimg.com/564x/2f/e2/53/2fe25352bdcb4d296124f68dba652fa8.jpg\",\n" +
+                                    "    \"resource\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi9Z1-gwbw8WXMauVeSjE_JZYtKjPxjp_718SVMQQHrbff9_0tALO-oJmkJCvI6y09E_M&usqp=CAU\",\n" +
                                     "    \"action\": \"https://play.google.com/store/apps/details?id=com.innersloth.spacemafia\"\n" +
                                     "  }\n" +
                                     "]",

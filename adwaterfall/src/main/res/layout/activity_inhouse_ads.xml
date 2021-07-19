@@ -10,7 +10,8 @@
         android:id="@+id/img_popup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/footer" />
+        android:layout_above="@id/footer"
+        android:scaleType="centerCrop" />
 
     <VideoView
         android:id="@+id/video_view"
