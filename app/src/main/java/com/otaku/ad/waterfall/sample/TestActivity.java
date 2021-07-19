@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.otaku.ad.waterfall.AdsManager;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
+import com.otaku.ad.waterfall.util.AdsLog;
 
 public class TestActivity extends AppCompatActivity {
     private Context context;
@@ -22,6 +23,7 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         context = this;
+        AdsLog.d("TEST__", "onCreate_____________");
         AdsManager.getInstance().showBanner((ViewGroup) findViewById(R.id.ads_banner));
         AdsManager.getInstance().showPopup(new PopupAdsListener() {
             @Override

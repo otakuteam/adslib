@@ -1,6 +1,7 @@
 package com.otaku.ad.waterfall;
 
 public class AdsConstants {
+    public static final String INHOUSE = "inhouse";
     public static final String ADMOB = "admob";
     public static final String UNITY = "unity";
     public static final String FACEBOOK = "facebook";

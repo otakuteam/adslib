@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otaku.ad.waterfall.admob.AdmobAdsManager;
 import com.otaku.ad.waterfall.facebook.FanManager;
+import com.otaku.ad.waterfall.inhouse.InhouseAdsManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
@@ -50,7 +51,7 @@ public class AdsManager implements IAdManager {
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
         List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
-                AdsConstants.FACEBOOK});
+                AdsConstants.FACEBOOK, AdsConstants.INHOUSE});
         ArrayList<String> waterFall = getWaterfall();
         if (waterFall == null || waterFall.isEmpty()) {
             waterFall = new ArrayList<>();
@@ -612,6 +613,15 @@ public class AdsManager implements IAdManager {
                     );
                 }
                 return new FanManager(adModel);
+            case AdsConstants.INHOUSE:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.INHOUSE, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
+                return new InhouseAdsManager(adModel);
             default:
                 if (adModel == null) {
                     adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
