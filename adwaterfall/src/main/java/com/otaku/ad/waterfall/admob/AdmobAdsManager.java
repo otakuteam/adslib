@@ -5,11 +5,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -24,7 +24,7 @@ import com.otaku.ad.waterfall.util.AdsLog;
 public class AdmobAdsManager extends AdsPlatform {
     public final String TAG = getClass().getSimpleName();
     private Context mContext;
-    private InterstitialAd popupAd;
+    private PublisherInterstitialAd popupAd;
     private RewardedVideoAd rewardAd;
     private PopupAdsListener adPopupListener;
     private RewardAdListener adRewardListener;
@@ -41,7 +41,7 @@ public class AdmobAdsManager extends AdsPlatform {
 
         MobileAds.initialize(mContext, mAdModel.getAppId());
 
-        popupAd = new InterstitialAd(mContext);
+        popupAd = new PublisherInterstitialAd(mContext);
         popupAd.setAdUnitId(mAdModel.getPopupId());
         popupAd.setAdListener(new AdListener() {
             @Override
@@ -118,21 +118,21 @@ public class AdmobAdsManager extends AdsPlatform {
 
     private void loadPopupAd() {
         if (popupAd != null && !popupAd.isLoading() && !popupAd.isLoaded()) {
-            popupAd.loadAd(new AdRequest.Builder().build());
+            popupAd.loadAd(new PublisherAdRequest.Builder().build());
         }
     }
 
     private void loadRewardAd() {
         if (rewardAd != null && !rewardAd.isLoaded()) {
-            rewardAd.loadAd(mAdModel.getRewardId(), new AdRequest.Builder().build());
+            rewardAd.loadAd(mAdModel.getRewardId(), new PublisherAdRequest.Builder().build());
         }
     }
 
     @Override
     public void showBanner(ViewGroup banner, BannerAdsListener listener) {
         if (banner != null) banner.removeAllViews();
-        AdView adView = new AdView(mContext);
-        adView.setAdSize(AdSize.SMART_BANNER);
+        PublisherAdView adView = new PublisherAdView(mContext);
+        adView.setAdSizes(AdSize.SMART_BANNER);
         adView.setAdUnitId(mAdModel.getBannerId());
         adView.setAdListener(new AdListener() {
             @Override
@@ -145,7 +145,7 @@ public class AdmobAdsManager extends AdsPlatform {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         banner.addView(adView, params);
-        AdRequest adRequest = new AdRequest.Builder()
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
                 .build();
         adView.loadAd(adRequest);
     }
@@ -164,7 +164,7 @@ public class AdmobAdsManager extends AdsPlatform {
         }
     }
 
-    private boolean canShowPopupAd(InterstitialAd ad) {
+    private boolean canShowPopupAd(PublisherInterstitialAd ad) {
         return (ad != null && ad.isLoaded());
     }
 
