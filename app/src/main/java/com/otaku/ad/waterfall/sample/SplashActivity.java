@@ -72,6 +72,7 @@ public class SplashActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         AdsManager.getInstance().setLimitTime(0);
+        AdsManager.getInstance().setPopupLimitShow(4);
 //        ArrayList<String> waterfall = new ArrayList<>();
 //        waterfall.add("admob");
 //        waterfall.add("unity");

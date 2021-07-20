@@ -26,6 +26,9 @@ public interface IAdManager {
 
     ArrayList<String> getWaterfall(); // get water fall in order of element in array
 
+
+    void setPopupLimitShow(int click); //popup ad show spacing
+
     void setLimitTime(long limitTime); //set time between 2 continuously ads showed
 
     void saveAdModel(AdModel adModel); //save app_id, banner_id, popup_id, reward_id of an Ad platform
