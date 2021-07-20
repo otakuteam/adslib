@@ -23,11 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AdsManager implements IAdManager {
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = "Main_" + getClass().getSimpleName();
     private boolean mEnableAd = true;
     private long mPreviousTime = 0;
     private boolean mShowPopup = false;
-    private ArrayList<AdsPlatform> mAdsPlatform = new ArrayList<>();
+    private ArrayList<AdsPlatform> mAdsPlatform;
     private Context mContext;
     private long mLimitTime = 15;
 
@@ -47,13 +47,16 @@ public class AdsManager implements IAdManager {
     @Override
     public void init(Context context, boolean testMode, AdModel... models) throws NotSupportPlatformException {
         mContext = context;
+        mAdsPlatform = new ArrayList<>();
         AdsPreferenceUtil.getInstance().init(context);
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
         List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY,
                 AdsConstants.FACEBOOK, AdsConstants.INHOUSE});
         ArrayList<String> waterFall = getWaterfall();
+
         if (waterFall == null || waterFall.isEmpty()) {
+            AdsLog.d(TAG, "waterfall_size: null");
             waterFall = new ArrayList<>();
             for (AdModel adModel : models) {
                 if (!supportPlatforms.contains(adModel.getName()))
@@ -65,6 +68,7 @@ public class AdsManager implements IAdManager {
         }
 
         if (waterFall != null && waterFall.size() > 0) {
+            AdsLog.d(TAG, "waterfall_size: " + waterFall.size());
             for (int i = 0; i < waterFall.size(); i++) {
                 AdsLog.i(TAG, "waterfall: " + waterFall.get(i));
                 mAdsPlatform.add(getAdsPlatformByName(waterFall.get(i), testMode));
@@ -74,6 +78,7 @@ public class AdsManager implements IAdManager {
             }
         }
 
+        AdsLog.i(TAG, "log_platform_size: " + mAdsPlatform.size());
         for (AdsPlatform platform : mAdsPlatform) {
             AdsLog.i(TAG, "log_platform" + platform.mAdModel.getName());
         }

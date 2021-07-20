@@ -25,17 +25,17 @@ public class TestActivity extends AppCompatActivity {
         context = this;
         AdsLog.d("TEST__", "onCreate_____________");
         AdsManager.getInstance().showBanner((ViewGroup) findViewById(R.id.ads_banner));
-//        AdsManager.getInstance().showPopup(new PopupAdsListener() {
-//            @Override
-//            public void OnClose() {
-//                Log.i("TEST__", "_test_OnClose");
-//            }
-//
-//            @Override
-//            public void OnShowFail() {
-//                Log.i("TEST__", "_test_OnShowFail");
-//            }
-//        });
+        AdsManager.getInstance().showPopup(new PopupAdsListener() {
+            @Override
+            public void OnClose() {
+                Log.i("TEST__", "_test_OnClose");
+            }
+
+            @Override
+            public void OnShowFail() {
+                Log.i("TEST__", "_test_OnShowFail");
+            }
+        });
 
         ((Button) findViewById(R.id.btn_test_reward)).setOnClickListener(new View.OnClickListener() {
             @Override

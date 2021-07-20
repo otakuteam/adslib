@@ -1,6 +1,5 @@
 package com.otaku.ad.waterfall.inhouse;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +13,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
@@ -35,11 +33,9 @@ public class InhouseAdsActivity extends AppCompatActivity {
     private String resourcePath;
     private int adsType;
     private boolean isRewared = false;
-    private Context mContext;
 
     ImageView btnClose, imageView;
     VideoView videoView;
-    Button btnInstall;
     EasyCountDownTextview counter;
 
     @Override
@@ -49,13 +45,13 @@ public class InhouseAdsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_inhouse_ads);
-        mContext = this;
+
 
         RelativeLayout rootLayout = findViewById(R.id.root_layout);
         btnClose = findViewById(R.id.btn_close);
         imageView = findViewById(R.id.img_popup);
         videoView = findViewById(R.id.video_view);
-        btnInstall = findViewById(R.id.btn_install);
+
         counter = findViewById(R.id.counter);
 
         rootLayout.setOnClickListener(new View.OnClickListener() {
@@ -67,15 +63,7 @@ public class InhouseAdsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        btnInstall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (actionUrl != null)
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(actionUrl)));
-                finish();
-            }
-        });
+
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
