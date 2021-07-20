@@ -2,6 +2,7 @@ package com.otaku.ad.waterfall.unity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -103,7 +104,13 @@ public class UnityAdsManager extends AdsPlatform {
         AdsLog.i(TAG, "showPopup");
         if (UnityAds.isReady(mAdModel.getPopupId())) {
             AdsLog.i(TAG, "showPopup ready " + mAdModel.getPopupId());
-            UnityAds.show(mActivity, mAdModel.getPopupId());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    UnityAds.show(mActivity, mAdModel.getPopupId());
+                }
+            }, 500);
+
         } else {
             AdsLog.i(TAG, "showPopup fail");
             if (mPopupListener != null) {
