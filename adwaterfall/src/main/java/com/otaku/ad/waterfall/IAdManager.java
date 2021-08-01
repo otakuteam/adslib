@@ -28,6 +28,8 @@ public interface IAdManager {
 
     void setLimitTime(long limitTime); //set time between 2 continuously ads showed
 
+    void setPopupLimitShow(int click); //popup ad show spacing
+
     void saveAdModel(AdModel adModel); //save app_id, banner_id, popup_id, reward_id of an Ad platform
 
     AdModel getAdModelByName(String name); //get AdModel
