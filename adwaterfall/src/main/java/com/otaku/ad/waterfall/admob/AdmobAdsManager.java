@@ -1,6 +1,9 @@
 package com.otaku.ad.waterfall.admob;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -140,11 +143,23 @@ public class AdmobAdsManager extends AdsPlatform {
                 super.onAdFailedToLoad(i);
                 listener.OnLoadFail();
             }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                banner.addView(adView, params);
+
+                View view = new View(mContext);
+                view.setBackgroundColor(Color.BLACK);
+                RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, (int) (4* ((float) mContext.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT)));
+                params2.addRule(RelativeLayout.ABOVE, adView.getId());
+                banner.addView(view, params2);
+            }
         });
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        banner.addView(adView, params);
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
                 .build();
         adView.loadAd(adRequest);

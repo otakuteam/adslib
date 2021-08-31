@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.otaku.ad.waterfall.AdsPlatform;
+import com.otaku.ad.waterfall.R;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
@@ -95,7 +96,12 @@ public class UnityAdsManager extends AdsPlatform {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         banner.addView(adView, params);
-        adView.load();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adView.load();
+            }
+        }, 500);
     }
 
     @Override
