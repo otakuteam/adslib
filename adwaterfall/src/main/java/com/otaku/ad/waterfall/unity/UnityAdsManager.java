@@ -114,7 +114,7 @@ public class UnityAdsManager extends AdsPlatform {
                 public void run() {
                     UnityAds.show(mActivity, mAdModel.getPopupId());
                 }
-            }, 500);
+            }, 300);
 
         } else {
             AdsLog.i(TAG, "showPopup fail");
