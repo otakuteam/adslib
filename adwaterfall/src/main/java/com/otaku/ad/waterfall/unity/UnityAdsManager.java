@@ -7,14 +7,16 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.otaku.ad.waterfall.AdsPlatform;
-import com.otaku.ad.waterfall.R;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
 import com.otaku.ad.waterfall.util.AdsLog;
-import com.unity3d.ads.IUnityAdsListener;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.UnityAds;
+import com.unity3d.ads.UnityAdsShowOptions;
 import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
@@ -32,51 +34,16 @@ public class UnityAdsManager extends AdsPlatform {
     @Override
     public void init(Context context, boolean testMode) {
         mActivity = (Activity) context;
-        UnityAds.initialize(mActivity, mAdModel.getAppId(), testMode);
 
-        UnityAds.addListener(new IUnityAdsListener() {
+        UnityAds.initialize(mActivity, mAdModel.getAppId(), testMode, new IUnityAdsInitializationListener() {
             @Override
-            public void onUnityAdsReady(String s) {
-                AdsLog.i(TAG, "onUnityAdsReady " + s);
-
+            public void onInitializationComplete() {
+                AdsLog.d(TAG, "onInitializationComplete");
             }
 
             @Override
-            public void onUnityAdsStart(String s) {
-                AdsLog.i(TAG, "onUnityAdsStart " + s);
-
-            }
-
-            @Override
-            public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-                AdsLog.i(TAG, "onUnityAdsFinish " + s);
-                if (mAdModel.getPopupId().equals(s)) {
-                    if (mPopupListener != null) {
-                        mPopupListener.OnClose();
-                    }
-                } else {
-                    if (finishState == UnityAds.FinishState.COMPLETED) {
-                        AdsLog.i(TAG, "finishState completed");
-                        if (mRewardAdListener != null) {
-                            mRewardAdListener.OnRewarded();
-                        }
-                        // Reward the user for watching the ad to completion.
-                    } else if (finishState == UnityAds.FinishState.SKIPPED) {
-                        // Do not reward the user for skipping the ad.
-                        AdsLog.i(TAG, "finishState skipped");
-                        if (mRewardAdListener != null) {
-                            mRewardAdListener.OnClose();
-                        }
-                    } else if (finishState == UnityAds.FinishState.ERROR) {
-                        // Log an error.
-                        AdsLog.i(TAG, "finishState error");
-                    }
-                }
-            }
-
-            @Override
-            public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-                AdsLog.i(TAG, "onUnityAdsError " + s);
+            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+                AdsLog.d(TAG, "onInitializationFailed");
             }
         });
     }
@@ -108,33 +75,104 @@ public class UnityAdsManager extends AdsPlatform {
     public void showPopup(PopupAdsListener listener) {
         mPopupListener = listener;
         AdsLog.i(TAG, "showPopup");
-        if (UnityAds.isReady(mAdModel.getPopupId())) {
-            AdsLog.i(TAG, "showPopup ready " + mAdModel.getPopupId());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    UnityAds.show(mActivity, mAdModel.getPopupId());
-                }
-            }, 300);
+        UnityAds.load(mAdModel.getPopupId(), new IUnityAdsLoadListener() {
+            @Override
+            public void onUnityAdsAdLoaded(String placementId) {
+                AdsLog.d(TAG, "onUnityAdsAdLoaded");
+                UnityAds.show(mActivity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                    @Override
+                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                        AdsLog.d(TAG, "onUnityAdsShowFailure");
+                        if (mPopupListener != null) {
+                            mPopupListener.OnShowFail();
+                        }
+                    }
 
-        } else {
-            AdsLog.i(TAG, "showPopup fail");
-            if (mPopupListener != null) {
-                mPopupListener.OnShowFail();
+                    @Override
+                    public void onUnityAdsShowStart(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowStart");
+                    }
+
+                    @Override
+                    public void onUnityAdsShowClick(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowClick");
+                    }
+
+                    @Override
+                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                        AdsLog.d(TAG, "onUnityAdsShowComplete");
+                        if (mPopupListener != null) {
+                            mPopupListener.OnClose();
+                        }
+                    }
+                });
             }
-        }
+
+            @Override
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                AdsLog.d(TAG, "onUnityAdsFailedToLoad");
+                if (mPopupListener != null) {
+                    mPopupListener.OnShowFail();
+                }
+            }
+        });
     }
 
     @Override
     public void showReward(RewardAdListener listener) {
         AdsLog.i(TAG, "showReward");
         mRewardAdListener = listener;
-        if (UnityAds.isReady(mAdModel.getRewardId())) {
-            UnityAds.show(mActivity, mAdModel.getRewardId());
-        } else {
-            if (mRewardAdListener != null) {
-                mRewardAdListener.OnShowFail();
+        UnityAds.load(mAdModel.getRewardId(), new IUnityAdsLoadListener() {
+            @Override
+            public void onUnityAdsAdLoaded(String placementId) {
+                AdsLog.d(TAG, "onUnityAdsAdLoaded");
+                UnityAds.show(mActivity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                    @Override
+                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                        AdsLog.d(TAG, "onUnityAdsShowFailure");
+                        if (mRewardAdListener != null) {
+                            mRewardAdListener.OnShowFail();
+                        }
+                    }
+
+                    @Override
+                    public void onUnityAdsShowStart(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowStart");
+                    }
+
+                    @Override
+                    public void onUnityAdsShowClick(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowClick");
+                    }
+
+                    @Override
+                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                        AdsLog.d(TAG, "onUnityAdsShowComplete");
+                        if (state.equals(UnityAds.UnityAdsShowCompletionState.COMPLETED)) {
+                            // Reward the user for watching the ad to completion
+                            AdsLog.d(TAG, "rewarded");
+                            if (mRewardAdListener != null) {
+                                mRewardAdListener.OnRewarded();
+                            }
+                        } else {
+                            // Do not reward the user for skipping the ad
+                            AdsLog.d(TAG, "skipped");
+                            if (mRewardAdListener != null) {
+                                mRewardAdListener.OnClose();
+                            }
+                        }
+
+                    }
+                });
             }
-        }
+
+            @Override
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                AdsLog.d(TAG, "onUnityAdsFailedToLoad");
+                if (mRewardAdListener != null) {
+                    mRewardAdListener.OnShowFail();
+                }
+            }
+        });
     }
 }
