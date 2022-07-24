@@ -1,5 +1,6 @@
 package com.otaku.ad.waterfall.admob;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
@@ -33,6 +34,7 @@ public class AdmobAdsManager extends AdsPlatform {
     private RewardAdListener adRewardListener;
     private boolean isPopupReloaded = false;
     private boolean isRewardReloaded = false;
+    private long mPreviousTime = 0;
 
     public AdmobAdsManager(AdModel adModel) {
         this.mAdModel = adModel;
@@ -132,7 +134,7 @@ public class AdmobAdsManager extends AdsPlatform {
     }
 
     @Override
-    public void showBanner(ViewGroup banner, BannerAdsListener listener) {
+    public void showBanner(Activity activity, ViewGroup banner, BannerAdsListener listener) {
         if (banner != null) banner.removeAllViews();
         PublisherAdView adView = new PublisherAdView(mContext);
         adView.setAdSizes(AdSize.SMART_BANNER);
@@ -154,7 +156,7 @@ public class AdmobAdsManager extends AdsPlatform {
                 View view = new View(mContext);
                 view.setBackgroundColor(Color.BLACK);
                 RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, (int) (4* ((float) mContext.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT)));
+                        ViewGroup.LayoutParams.MATCH_PARENT, (int) (4 * ((float) mContext.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT)));
                 params2.addRule(RelativeLayout.ABOVE, adView.getId());
                 banner.addView(view, params2);
             }
@@ -166,9 +168,9 @@ public class AdmobAdsManager extends AdsPlatform {
     }
 
     @Override
-    public void showPopup(PopupAdsListener listener) {
+    public void showPopup(Activity activity, PopupAdsListener listener) {
         adPopupListener = listener;
-        AdsLog.i(TAG, "showPopup");
+        AdsLog.i(TAG, "admob-showPopup");
         if (canShowPopupAd(popupAd)) {
             isPopupReloaded = false; //Reset the reload-flag everytime showing an ad
             popupAd.show();
@@ -179,12 +181,28 @@ public class AdmobAdsManager extends AdsPlatform {
         }
     }
 
+    @Override
+    public void forceShowPopup(Activity activity, PopupAdsListener listener) {
+        adPopupListener = listener;
+        AdsLog.i(TAG, "forceShowPopup");
+        if (popupAd != null && popupAd.isLoaded()) {
+            isPopupReloaded = false; //Reset the reload-flag everytime showing an ad
+            popupAd.show();
+        } else {
+            loadPopupAd();
+            if (adPopupListener != null)
+                adPopupListener.OnShowFail();
+        }
+    }
+
     private boolean canShowPopupAd(PublisherInterstitialAd ad) {
-        return (ad != null && ad.isLoaded());
+        long currentTime = System.currentTimeMillis();
+        AdsLog.d(TAG, "canShowPopup: " + (currentTime - mPreviousTime));
+        return (ad != null && ad.isLoaded() && (currentTime - mPreviousTime >= mAdModel.getPopupLimitTime()));
     }
 
     @Override
-    public void showReward(RewardAdListener listener) {
+    public void showReward(Activity activity, RewardAdListener listener) {
         adRewardListener = listener;
         if (canShowReward(rewardAd)) {
             isRewardReloaded = false;
