@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otaku.ad.waterfall.admob.AdmobAdsManager;
+import com.otaku.ad.waterfall.gamob.GamobAdsManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
@@ -49,7 +50,7 @@ public class AdsManager implements IAdManager {
         AdsPreferenceUtil.getInstance().init(context);
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
-        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY});
+        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY, AdsConstants.GAMOB});
         ArrayList<String> waterFall = getWaterfall();
 
         if (waterFall == null || waterFall.isEmpty()) {
@@ -107,6 +108,23 @@ public class AdsManager implements IAdManager {
                             }
                         });
                         return;
+                    case 3:
+                        mAdsPlatform.get(0).showBanner(activity, banner, new BannerAdsListener() {
+                            @Override
+                            public void OnLoadFail() {
+                                mAdsPlatform.get(1).showBanner(activity, banner, new BannerAdsListener() {
+                                    @Override
+                                    public void OnLoadFail() {
+                                        mAdsPlatform.get(2).showBanner(activity, banner, new BannerAdsListener() {
+                                            @Override
+                                            public void OnLoadFail() {
+
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
                     default:
                         mAdsPlatform.get(0).showBanner(activity, banner, new BannerAdsListener() {
                             @Override
@@ -114,12 +132,21 @@ public class AdsManager implements IAdManager {
                                 mAdsPlatform.get(1).showBanner(activity, banner, new BannerAdsListener() {
                                     @Override
                                     public void OnLoadFail() {
+                                        mAdsPlatform.get(2).showBanner(activity, banner, new BannerAdsListener() {
+                                            @Override
+                                            public void OnLoadFail() {
+                                                mAdsPlatform.get(3).showBanner(activity, banner, new BannerAdsListener() {
+                                                    @Override
+                                                    public void OnLoadFail() {
 
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                             }
                         });
-                        return;
                 }
             } catch (Exception e) {
                 //LogUtil.e(TAG, e.getMessage());
@@ -174,6 +201,43 @@ public class AdsManager implements IAdManager {
                         });
                         mPreviousTime = System.currentTimeMillis();
                         return;
+                    case 3:
+                        mAdsPlatform.get(0).showPopup(activity, new PopupAdsListener() {
+                            @Override
+                            public void OnClose() {
+                                AdsLog.d(TAG, "OnClose");
+                                listener.OnClose();
+                            }
+
+                            @Override
+                            public void OnShowFail() {
+                                AdsLog.d(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                mAdsPlatform.get(1).showPopup(activity, new PopupAdsListener() {
+                                    @Override
+                                    public void OnClose() {
+                                        listener.OnClose();
+                                    }
+
+                                    @Override
+                                    public void OnShowFail() {
+                                        AdsLog.d(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                        mAdsPlatform.get(2).showPopup(activity, new PopupAdsListener() {
+                                            @Override
+                                            public void OnClose() {
+                                                listener.OnClose();
+                                            }
+
+                                            @Override
+                                            public void OnShowFail() {
+                                                listener.OnShowFail();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        mPreviousTime = System.currentTimeMillis();
+                        return;
                     default:
                         mAdsPlatform.get(0).showPopup(activity, new PopupAdsListener() {
                             @Override
@@ -191,7 +255,27 @@ public class AdsManager implements IAdManager {
 
                                     @Override
                                     public void OnShowFail() {
-                                        listener.OnShowFail();
+                                        mAdsPlatform.get(2).showPopup(activity, new PopupAdsListener() {
+                                            @Override
+                                            public void OnClose() {
+                                                listener.OnClose();
+                                            }
+
+                                            @Override
+                                            public void OnShowFail() {
+                                                mAdsPlatform.get(3).showPopup(activity, new PopupAdsListener() {
+                                                    @Override
+                                                    public void OnClose() {
+                                                        listener.OnClose();
+                                                    }
+
+                                                    @Override
+                                                    public void OnShowFail() {
+                                                        listener.OnShowFail();
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -256,6 +340,43 @@ public class AdsManager implements IAdManager {
                         });
                         mPreviousTime = System.currentTimeMillis();
                         return;
+                    case 3:
+                        mAdsPlatform.get(0).forceShowPopup(activity, new PopupAdsListener() {
+                            @Override
+                            public void OnClose() {
+                                AdsLog.d(TAG, "OnClose");
+                                listener.OnClose();
+                            }
+
+                            @Override
+                            public void OnShowFail() {
+                                AdsLog.d(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                mAdsPlatform.get(1).forceShowPopup(activity, new PopupAdsListener() {
+                                    @Override
+                                    public void OnClose() {
+                                        listener.OnClose();
+                                    }
+
+                                    @Override
+                                    public void OnShowFail() {
+                                        AdsLog.d(TAG, "OnShowFail: " + mAdsPlatform.get(0).mAdModel.getName());
+                                        mAdsPlatform.get(2).forceShowPopup(activity, new PopupAdsListener() {
+                                            @Override
+                                            public void OnClose() {
+                                                listener.OnClose();
+                                            }
+
+                                            @Override
+                                            public void OnShowFail() {
+                                                listener.OnShowFail();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        mPreviousTime = System.currentTimeMillis();
+                        return;
                     default:
                         mAdsPlatform.get(0).forceShowPopup(activity, new PopupAdsListener() {
                             @Override
@@ -273,7 +394,27 @@ public class AdsManager implements IAdManager {
 
                                     @Override
                                     public void OnShowFail() {
-                                        listener.OnShowFail();
+                                        mAdsPlatform.get(2).forceShowPopup(activity, new PopupAdsListener() {
+                                            @Override
+                                            public void OnClose() {
+                                                listener.OnClose();
+                                            }
+
+                                            @Override
+                                            public void OnShowFail() {
+                                                mAdsPlatform.get(3).forceShowPopup(activity, new PopupAdsListener() {
+                                                    @Override
+                                                    public void OnClose() {
+                                                        listener.OnClose();
+                                                    }
+
+                                                    @Override
+                                                    public void OnShowFail() {
+                                                        listener.OnShowFail();
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -293,8 +434,10 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void forceShowAdModelPopup(Activity activity, String admodelName, PopupAdsListener listener) {
-        if(mAdsPlatform.get(0).mAdModel.getName().equals(admodelName)) mAdsPlatform.get(0).forceShowPopup(activity, listener);
-        if(mAdsPlatform.get(1).mAdModel.getName().equals(admodelName)) mAdsPlatform.get(1).forceShowPopup(activity, listener);
+        if (mAdsPlatform.get(0).mAdModel.getName().equals(admodelName))
+            mAdsPlatform.get(0).forceShowPopup(activity, listener);
+        if (mAdsPlatform.get(1).mAdModel.getName().equals(admodelName))
+            mAdsPlatform.get(1).forceShowPopup(activity, listener);
         mPreviousTime = System.currentTimeMillis();
     }
 
@@ -365,6 +508,66 @@ public class AdsManager implements IAdManager {
                         }
                     });
                     return;
+                case 3:
+                    mAdsPlatform.get(0).showReward(activity, new RewardAdListener() {
+                        @Override
+                        public void OnClose() {
+                            listener.OnClose();
+                            mPreviousTime = System.currentTimeMillis();
+                            mShowPopup++;
+                        }
+
+                        @Override
+                        public void OnShowFail() {
+                            mAdsPlatform.get(1).showReward(activity, new RewardAdListener() {
+                                @Override
+                                public void OnClose() {
+                                    listener.OnClose();
+                                    mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup++;
+                                }
+
+                                @Override
+                                public void OnShowFail() {
+                                    mAdsPlatform.get(2).showReward(activity, new RewardAdListener() {
+                                        @Override
+                                        public void OnClose() {
+                                            listener.OnClose();
+                                            mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup++;
+                                        }
+
+                                        @Override
+                                        public void OnShowFail() {
+                                            listener.OnShowFail();
+                                        }
+
+                                        @Override
+                                        public void OnRewarded() {
+                                            listener.OnRewarded();
+                                            mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup++;
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void OnRewarded() {
+                                    listener.OnRewarded();
+                                    mPreviousTime = System.currentTimeMillis();
+                                    mShowPopup++;
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void OnRewarded() {
+                            listener.OnRewarded();
+                            mPreviousTime = System.currentTimeMillis();
+                            mShowPopup++;
+                        }
+                    });
+                    return;
                 default:
                     mAdsPlatform.get(0).showReward(activity, new RewardAdListener() {
                         @Override
@@ -386,7 +589,45 @@ public class AdsManager implements IAdManager {
 
                                 @Override
                                 public void OnShowFail() {
-                                    listener.OnShowFail();
+                                    mAdsPlatform.get(2).showReward(activity, new RewardAdListener() {
+                                        @Override
+                                        public void OnClose() {
+                                            listener.OnClose();
+                                            mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup++;
+                                        }
+
+                                        @Override
+                                        public void OnShowFail() {
+                                            mAdsPlatform.get(3).showReward(activity, new RewardAdListener() {
+                                                @Override
+                                                public void OnClose() {
+                                                    listener.OnClose();
+                                                    mPreviousTime = System.currentTimeMillis();
+                                                    mShowPopup++;
+                                                }
+
+                                                @Override
+                                                public void OnShowFail() {
+                                                    listener.OnShowFail();
+                                                }
+
+                                                @Override
+                                                public void OnRewarded() {
+                                                    listener.OnRewarded();
+                                                    mPreviousTime = System.currentTimeMillis();
+                                                    mShowPopup++;
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void OnRewarded() {
+                                            listener.OnRewarded();
+                                            mPreviousTime = System.currentTimeMillis();
+                                            mShowPopup++;
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -517,6 +758,15 @@ public class AdsManager implements IAdManager {
                     );
                 }
                 return new AdmobAdsManager(adModel);
+            case AdsConstants.GAMOB:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.GAMOB, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id)
+                    );
+                }
+                return new GamobAdsManager(adModel);
             case AdsConstants.UNITY:
                 if (adModel == null) {
                     adModel = new AdModel(AdsConstants.UNITY, mContext.getString(R.string.app_id),
