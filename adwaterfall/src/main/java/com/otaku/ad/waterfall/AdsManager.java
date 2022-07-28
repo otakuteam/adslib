@@ -27,6 +27,7 @@ public class AdsManager implements IAdManager {
     private boolean mEnableAd = true;
     private long mPreviousTime = 0;
     private int mShowPopup = 0;
+    private boolean mShowBanner = true;
     private ArrayList<AdsPlatform> mAdsPlatform;
     private Context mContext;
 
@@ -692,8 +693,9 @@ public class AdsManager implements IAdManager {
     }
 
     @Override
-    public void setAdModelPopupLimitTime(String admodelName, long limitTime) {
-
+    public void setShowBanner(boolean show) {
+        mShowBanner = show;
+        AdsPreferenceUtil.getInstance().putBoolean(AdsConstants.PREF_ENABLE_BANNER, mShowBanner);
     }
 
     @Override
@@ -724,7 +726,7 @@ public class AdsManager implements IAdManager {
 
     private boolean canShowBanner() {
         //check vip
-        return mEnableAd;
+        return mEnableAd && mShowBanner;
     }
 
     private boolean canShowPopup() {

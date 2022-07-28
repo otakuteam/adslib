@@ -40,6 +40,6 @@ public interface IAdManager {
 
     AdModel getAdModelByName(String name); //get AdModel
 
-    void setAdModelPopupLimitTime(String admodelName, long limitTime);
+    void setShowBanner(boolean show);
 
 }
