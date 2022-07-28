@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AdsManager.getInstance().showBanner(this, (findViewById(R.id.banner)));
         ((Button) findViewById(R.id.btn_show_popup)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
