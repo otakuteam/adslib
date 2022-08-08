@@ -15,7 +15,7 @@ import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.util.AdsLog;
 
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
     private Context context;
 
     @Override

@@ -11,7 +11,7 @@ import com.otaku.ad.waterfall.AdsConstants;
 import com.otaku.ad.waterfall.AdsManager;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

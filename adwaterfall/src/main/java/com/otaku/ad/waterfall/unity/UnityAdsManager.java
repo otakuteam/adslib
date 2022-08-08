@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.otaku.ad.waterfall.AdsPlatform;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
@@ -186,5 +187,25 @@ public class UnityAdsManager extends AdsPlatform {
                 AdsLog.d(TAG, "onRewardedFailedLoad");
             }
         });
+    }
+
+    @Override
+    public boolean isOpenAdsAvailable() {
+        return false;
+    }
+
+    @Override
+    public boolean isShowingOpenAd() {
+        return false;
+    }
+
+    @Override
+    public void showOpenAdIfAvailable(Activity activity) {
+
+    }
+
+    @Override
+    public void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener) {
+
     }
 }

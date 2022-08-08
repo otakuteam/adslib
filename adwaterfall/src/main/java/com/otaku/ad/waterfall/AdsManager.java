@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.otaku.ad.waterfall.admob.AdmobAdsManager;
 import com.otaku.ad.waterfall.gamob.GamobAdsManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
@@ -723,6 +724,50 @@ public class AdsManager implements IAdManager {
         AdsPreferenceUtil.getInstance().putString(AdsConstants.PREF_AD_WATERFALL, json);
     }
 
+    @Override
+    public void showOpenAdIfAvailable(Activity activity) {
+        try {
+            for (AdsPlatform adsPlatform : mAdsPlatform) {
+                AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
+                if (adsPlatform.isOpenAdsAvailable()) {
+                    adsPlatform.showOpenAdIfAvailable(activity);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override
+    public boolean isShowingOpenAd() {
+        try {
+            for (AdsPlatform adsPlatform : mAdsPlatform) {
+                if (adsPlatform.isOpenAdsAvailable()) {
+                    return adsPlatform.isShowingOpenAd();
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return false;
+    }
+
+    @Override
+    public void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener) {
+        try {
+            for (AdsPlatform adsPlatform : mAdsPlatform) {
+                AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
+                if (adsPlatform.isOpenAdsAvailable()) {
+                    adsPlatform.showOpenAdIfAvailable(activity, onShowAdCompleteListener);
+                    return;
+                }
+            }
+            onShowAdCompleteListener.OnShowAdComplete();
+        } catch (Exception e) {
+
+        }
+    }
 
     private boolean canShowBanner() {
         //check vip
@@ -756,7 +801,8 @@ public class AdsManager implements IAdManager {
                     adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
+                            mContext.getString(R.string.reward_id),
+                            mContext.getString(R.string.open_id)
                     );
                 }
                 return new AdmobAdsManager(adModel);
@@ -765,7 +811,8 @@ public class AdsManager implements IAdManager {
                     adModel = new AdModel(AdsConstants.GAMOB, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
+                            mContext.getString(R.string.reward_id),
+                            mContext.getString(R.string.open_id)
                     );
                 }
                 return new GamobAdsManager(adModel);
@@ -774,7 +821,8 @@ public class AdsManager implements IAdManager {
                     adModel = new AdModel(AdsConstants.UNITY, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
+                            mContext.getString(R.string.reward_id),
+                            mContext.getString(R.string.open_id)
                     );
                 }
                 return new UnityAdsManager(adModel);
@@ -783,7 +831,8 @@ public class AdsManager implements IAdManager {
                     adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
                             mContext.getString(R.string.banner_id),
                             mContext.getString(R.string.popup_id),
-                            mContext.getString(R.string.reward_id)
+                            mContext.getString(R.string.reward_id),
+                            mContext.getString(R.string.open_id)
                     );
                 }
                 return new AdmobAdsManager(adModel);

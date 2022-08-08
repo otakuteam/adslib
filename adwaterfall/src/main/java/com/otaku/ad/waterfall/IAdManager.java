@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
@@ -42,4 +43,9 @@ public interface IAdManager {
 
     void setShowBanner(boolean show);
 
+    void showOpenAdIfAvailable(Activity activity);
+
+    boolean isShowingOpenAd();
+
+    void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener);
 }

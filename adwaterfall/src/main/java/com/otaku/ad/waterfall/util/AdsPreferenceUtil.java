@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class AdsPreferenceUtil {
+    private final String TAG = getClass().getSimpleName();
     private static AdsPreferenceUtil instance;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
@@ -26,6 +27,7 @@ public class AdsPreferenceUtil {
     }
 
     public void putString(String key, String value) {
+        AdsLog.d(TAG, "putString: " + key + " " + value);
         if (mEditor != null) {
             mEditor.putString(key, value);
             mEditor.commit();
