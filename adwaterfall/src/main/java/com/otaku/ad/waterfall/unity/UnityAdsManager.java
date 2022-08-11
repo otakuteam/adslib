@@ -112,12 +112,14 @@ public class UnityAdsManager extends AdsPlatform {
                     public void onInterstitialClosed(InterstitialAd interstitialAd) {
                         // The ad has finished showing.
                         AdsLog.d(TAG, "onInterstitialClosed");
+                        if (listener != null) listener.OnClose();
                     }
 
                     @Override
                     public void onInterstitialFailedShow(InterstitialAd interstitialAd, ShowError error, String msg) {
                         // An error occurred during the ad playback.
                         AdsLog.d(TAG, "onInterstitialFailedShow");
+                        if (listener != null) listener.OnShowFail();
                     }
                 });
             }
@@ -126,6 +128,7 @@ public class UnityAdsManager extends AdsPlatform {
             public void onInterstitialFailedLoad(InterstitialAd interstitialAd, LoadError error, String msg) {
                 // interstitial ad has failed to load
                 AdsLog.d(TAG, "onInterstitialFailedLoad");
+                if (listener != null) listener.OnShowFail();
             }
         });
     }
@@ -161,6 +164,7 @@ public class UnityAdsManager extends AdsPlatform {
                     public void onRewardedClosed(RewardedAd rewardedAd) {
                         // Ad has been closed
                         AdsLog.d(TAG, "onRewardedClosed");
+                        if (listener != null) listener.OnClose();
                     }
 
                     @Override
@@ -168,6 +172,7 @@ public class UnityAdsManager extends AdsPlatform {
                         // Ad has failed to play
                         // Use the message and ShowError enum to determine the ad network and cause
                         AdsLog.d(TAG, "onRewardedFailedShow");
+                        if (listener != null) listener.OnShowFail();
                     }
 
                     @Override
@@ -175,6 +180,7 @@ public class UnityAdsManager extends AdsPlatform {
                         // A reward can be issued based on the reward callback.
                         // Timing of this event can vary depending on the ad network to serve the impression.
                         AdsLog.d(TAG, "onUserRewarded");
+                        if (listener != null) listener.OnRewarded();
                     }
                 });
             }
@@ -185,6 +191,7 @@ public class UnityAdsManager extends AdsPlatform {
                 // ad has failed to show
                 // use the message and ShowError enum to determine ad network and cause
                 AdsLog.d(TAG, "onRewardedFailedLoad");
+                if (listener != null) listener.OnShowFail();
             }
         });
     }
