@@ -766,8 +766,8 @@ public class AdsManager implements IAdManager {
                         return;
                     }
                 }
-                onShowAdCompleteListener.OnShowAdComplete();
             }
+            onShowAdCompleteListener.OnShowAdComplete();
         } catch (Exception e) {
 
         }
