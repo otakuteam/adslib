@@ -727,11 +727,13 @@ public class AdsManager implements IAdManager {
     @Override
     public void showOpenAdIfAvailable(Activity activity) {
         try {
-            for (AdsPlatform adsPlatform : mAdsPlatform) {
-                AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
-                if (adsPlatform.isOpenAdsAvailable()) {
-                    adsPlatform.showOpenAdIfAvailable(activity);
-                    return;
+            if (mEnableAd) {
+                for (AdsPlatform adsPlatform : mAdsPlatform) {
+                    AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
+                    if (adsPlatform.isOpenAdsAvailable()) {
+                        adsPlatform.showOpenAdIfAvailable(activity);
+                        return;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -756,14 +758,16 @@ public class AdsManager implements IAdManager {
     @Override
     public void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener) {
         try {
-            for (AdsPlatform adsPlatform : mAdsPlatform) {
-                AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
-                if (adsPlatform.isOpenAdsAvailable()) {
-                    adsPlatform.showOpenAdIfAvailable(activity, onShowAdCompleteListener);
-                    return;
+            if (mEnableAd) {
+                for (AdsPlatform adsPlatform : mAdsPlatform) {
+                    AdsLog.d(TAG, "openads_available: " + adsPlatform.isOpenAdsAvailable());
+                    if (adsPlatform.isOpenAdsAvailable()) {
+                        adsPlatform.showOpenAdIfAvailable(activity, onShowAdCompleteListener);
+                        return;
+                    }
                 }
+                onShowAdCompleteListener.OnShowAdComplete();
             }
-            onShowAdCompleteListener.OnShowAdComplete();
         } catch (Exception e) {
 
         }
