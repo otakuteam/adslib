@@ -25,7 +25,7 @@ Need add some lines to fix some bugs
      }
      
  # using unity mediation but old version of google ads
- implementation 'com.github.otakuteam:adslib:v2.3'
+ implementation 'com.github.otakuteam:adslib:v2.4'
  
  # using unity mediation with new version of google ads, add open ads
- implementation 'com.github.otakuteam:adslib:v3.2'
+ implementation 'com.github.otakuteam:adslib:v3.3'
