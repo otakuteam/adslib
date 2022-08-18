@@ -163,24 +163,36 @@ public class UnityAdsManager extends AdsPlatform {
                     @Override
                     public void onRewardedClosed(RewardedAd rewardedAd) {
                         // Ad has been closed
-                        AdsLog.d(TAG, "onRewardedClosed");
-                        if (listener != null) listener.OnClose();
+                        try {
+                            AdsLog.d(TAG, "onRewardedClosed");
+                            if (listener != null) listener.OnClose();
+                        }catch (Exception e){
+
+                        }
                     }
 
                     @Override
                     public void onRewardedFailedShow(RewardedAd rewardedAd, ShowError error, String msg) {
                         // Ad has failed to play
                         // Use the message and ShowError enum to determine the ad network and cause
-                        AdsLog.d(TAG, "onRewardedFailedShow");
-                        if (listener != null) listener.OnShowFail();
+                        try {
+                            AdsLog.d(TAG, "onRewardedFailedShow");
+                            if (listener != null) listener.OnShowFail();
+                        }catch (Exception e){
+
+                        }
                     }
 
                     @Override
                     public void onUserRewarded(RewardedAd rewardedAd, IReward reward) {
                         // A reward can be issued based on the reward callback.
                         // Timing of this event can vary depending on the ad network to serve the impression.
-                        AdsLog.d(TAG, "onUserRewarded");
-                        if (listener != null) listener.OnRewarded();
+                        try {
+                            AdsLog.d(TAG, "onUserRewarded");
+                            if (listener != null) listener.OnRewarded();
+                        }catch (Exception e){
+
+                        }
                     }
                 });
             }
@@ -190,8 +202,12 @@ public class UnityAdsManager extends AdsPlatform {
             public void onRewardedFailedLoad(RewardedAd rewardedAd, LoadError error, String msg) {
                 // ad has failed to show
                 // use the message and ShowError enum to determine ad network and cause
-                AdsLog.d(TAG, "onRewardedFailedLoad");
-                if (listener != null) listener.OnShowFail();
+                try {
+                    AdsLog.d(TAG, "onRewardedFailedLoad");
+                    if (listener != null) listener.OnShowFail();
+                }catch (Exception e){
+                    
+                }
             }
         });
     }
