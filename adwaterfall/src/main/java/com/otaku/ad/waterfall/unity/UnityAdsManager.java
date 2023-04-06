@@ -13,27 +13,19 @@ import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
 import com.otaku.ad.waterfall.util.AdsLog;
-import com.unity3d.mediation.IInitializationListener;
-import com.unity3d.mediation.IInterstitialAdLoadListener;
-import com.unity3d.mediation.IInterstitialAdShowListener;
-import com.unity3d.mediation.IReward;
-import com.unity3d.mediation.IRewardedAdLoadListener;
-import com.unity3d.mediation.IRewardedAdShowListener;
-import com.unity3d.mediation.InitializationConfiguration;
-import com.unity3d.mediation.InterstitialAd;
-import com.unity3d.mediation.RewardedAd;
-import com.unity3d.mediation.UnityMediation;
-import com.unity3d.mediation.errors.LoadError;
-import com.unity3d.mediation.errors.SdkInitializationError;
-import com.unity3d.mediation.errors.ShowError;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
+import com.unity3d.ads.UnityAds;
+import com.unity3d.ads.UnityAdsShowOptions;
 import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
 
 public class UnityAdsManager extends AdsPlatform {
     private final String TAG = getClass().getSimpleName();
-    private InterstitialAd interstitialAd;
-    private RewardedAd rewardedAd;
+    private PopupAdsListener mPopupListener;
+    private RewardAdListener mRewardAdListener;
 
     public UnityAdsManager(AdModel adModel) {
         mAdModel = adModel;
@@ -41,24 +33,17 @@ public class UnityAdsManager extends AdsPlatform {
 
     @Override
     public void init(Context context, boolean testMode) {
-        InitializationConfiguration configuration = InitializationConfiguration.builder()
-                .setGameId(mAdModel.getAppId())
-                .setInitializationListener(new IInitializationListener() {
-                    @Override
-                    public void onInitializationComplete() {
-                        // Unity Mediation is initialized. Try loading an ad.
-                        AdsLog.d(TAG, "Unity Mediation is successfully initialized.");
-                        //loadInterstitialAd();
-                    }
+        UnityAds.initialize(context, mAdModel.getAppId(), testMode, new IUnityAdsInitializationListener() {
+            @Override
+            public void onInitializationComplete() {
+                AdsLog.d(TAG, "onInitializationComplete");
+            }
 
-                    @Override
-                    public void onInitializationFailed(SdkInitializationError errorCode, String msg) {
-                        // Unity Mediation failed to initialize. Printing failure reason...
-                        AdsLog.d(TAG, "Unity Mediation Failed to Initialize : " + msg);
-                    }
-                }).build();
-
-        UnityMediation.initialize(configuration);
+            @Override
+            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+                AdsLog.d(TAG, "onInitializationFailed");
+            }
+        });
     }
 
     @Override
@@ -81,54 +66,52 @@ public class UnityAdsManager extends AdsPlatform {
             public void run() {
                 adView.load();
             }
-        }, 500);
+        }, 300);
     }
 
     @Override
     public void showPopup(Activity activity, PopupAdsListener listener) {
-        AdsLog.d(TAG, "showUnityPopup_id: " + mAdModel.getPopupId());
-        interstitialAd = new InterstitialAd(activity, mAdModel.getPopupId());
-        AdsLog.d(TAG, "unity-showPopup: " + interstitialAd.getAdState());
-        interstitialAd.load(new IInterstitialAdLoadListener() {
+        mPopupListener = listener;
+        AdsLog.i(TAG, "showPopup");
+        UnityAds.load(mAdModel.getPopupId(), new IUnityAdsLoadListener() {
             @Override
-            public void onInterstitialLoaded(InterstitialAd interstitialAd) {
-                AdsLog.d(TAG, "onInterstitialLoaded");
-                // interstitial ad is ready to show
-                // you can also check the ad state prior to showing by using interstitialAd.getState()
-                interstitialAd.show(new IInterstitialAdShowListener() {
+            public void onUnityAdsAdLoaded(String placementId) {
+                AdsLog.d(TAG, "onUnityAdsAdLoaded");
+                UnityAds.show(activity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                     @Override
-                    public void onInterstitialShowed(InterstitialAd interstitialAd) {
-                        // The ad has started to show.
-                        AdsLog.d(TAG, "onInterstitialShowed");
+                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                        AdsLog.d(TAG, "onUnityAdsShowFailure");
+                        if (mPopupListener != null) {
+                            mPopupListener.OnShowFail();
+                        }
                     }
 
                     @Override
-                    public void onInterstitialClicked(InterstitialAd interstitialAd) {
-                        // The user has selected the ad.
-                        AdsLog.d(TAG, "onInterstitialClicked");
+                    public void onUnityAdsShowStart(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowStart");
                     }
 
                     @Override
-                    public void onInterstitialClosed(InterstitialAd interstitialAd) {
-                        // The ad has finished showing.
-                        AdsLog.d(TAG, "onInterstitialClosed");
-                        if (listener != null) listener.OnClose();
+                    public void onUnityAdsShowClick(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowClick");
                     }
 
                     @Override
-                    public void onInterstitialFailedShow(InterstitialAd interstitialAd, ShowError error, String msg) {
-                        // An error occurred during the ad playback.
-                        AdsLog.d(TAG, "onInterstitialFailedShow");
-                        if (listener != null) listener.OnShowFail();
+                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                        AdsLog.d(TAG, "onUnityAdsShowComplete");
+                        if (mPopupListener != null) {
+                            mPopupListener.OnClose();
+                        }
                     }
                 });
             }
 
             @Override
-            public void onInterstitialFailedLoad(InterstitialAd interstitialAd, LoadError error, String msg) {
-                // interstitial ad has failed to load
-                AdsLog.d(TAG, "onInterstitialFailedLoad");
-                if (listener != null) listener.OnShowFail();
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                AdsLog.d(TAG, "onUnityAdsFailedToLoad");
+                if (mPopupListener != null) {
+                    mPopupListener.OnShowFail();
+                }
             }
         });
     }
@@ -140,73 +123,57 @@ public class UnityAdsManager extends AdsPlatform {
 
     @Override
     public void showReward(Activity activity, RewardAdListener listener) {
-        rewardedAd = new RewardedAd(activity, mAdModel.getRewardId());
-        rewardedAd.load(new IRewardedAdLoadListener() {
+        AdsLog.i(TAG, "showReward");
+        mRewardAdListener = listener;
+        UnityAds.load(mAdModel.getRewardId(), new IUnityAdsLoadListener() {
             @Override
-            public void onRewardedLoaded(RewardedAd rewardedAd) {
-                // rewarded ad is ready to show
-                // you can also check the ad state prior to showing using interstitialAd.getState()
-                AdsLog.d(TAG, "onRewardedLoaded");
-                rewardedAd.show(new IRewardedAdShowListener() {
+            public void onUnityAdsAdLoaded(String placementId) {
+                AdsLog.d(TAG, "onUnityAdsAdLoaded");
+                UnityAds.show(activity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                     @Override
-                    public void onRewardedShowed(RewardedAd rewardedAd) {
-                        // Ad has played
-                        AdsLog.d(TAG, "onRewardedShowed");
-                    }
-
-                    @Override
-                    public void onRewardedClicked(RewardedAd rewardedAd) {
-                        // Ad has been selected
-                        AdsLog.d(TAG, "onRewardedClicked");
-                    }
-
-                    @Override
-                    public void onRewardedClosed(RewardedAd rewardedAd) {
-                        // Ad has been closed
-                        try {
-                            AdsLog.d(TAG, "onRewardedClosed");
-                            if (listener != null) listener.OnClose();
-                        }catch (Exception e){
-
+                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                        AdsLog.d(TAG, "onUnityAdsShowFailure");
+                        if (mRewardAdListener != null) {
+                            mRewardAdListener.OnShowFail();
                         }
                     }
 
                     @Override
-                    public void onRewardedFailedShow(RewardedAd rewardedAd, ShowError error, String msg) {
-                        // Ad has failed to play
-                        // Use the message and ShowError enum to determine the ad network and cause
-                        try {
-                            AdsLog.d(TAG, "onRewardedFailedShow");
-                            if (listener != null) listener.OnShowFail();
-                        }catch (Exception e){
-
-                        }
+                    public void onUnityAdsShowStart(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowStart");
                     }
 
                     @Override
-                    public void onUserRewarded(RewardedAd rewardedAd, IReward reward) {
-                        // A reward can be issued based on the reward callback.
-                        // Timing of this event can vary depending on the ad network to serve the impression.
-                        try {
-                            AdsLog.d(TAG, "onUserRewarded");
-                            if (listener != null) listener.OnRewarded();
-                        }catch (Exception e){
+                    public void onUnityAdsShowClick(String placementId) {
+                        AdsLog.d(TAG, "onUnityAdsShowClick");
+                    }
 
+                    @Override
+                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                        AdsLog.d(TAG, "onUnityAdsShowComplete");
+                        if (state.equals(UnityAds.UnityAdsShowCompletionState.COMPLETED)) {
+                            // Reward the user for watching the ad to completion
+                            AdsLog.d(TAG, "rewarded");
+                            if (mRewardAdListener != null) {
+                                mRewardAdListener.OnRewarded();
+                            }
+                        } else {
+                            // Do not reward the user for skipping the ad
+                            AdsLog.d(TAG, "skipped");
+                            if (mRewardAdListener != null) {
+                                mRewardAdListener.OnClose();
+                            }
                         }
+
                     }
                 });
             }
 
-
             @Override
-            public void onRewardedFailedLoad(RewardedAd rewardedAd, LoadError error, String msg) {
-                // ad has failed to show
-                // use the message and ShowError enum to determine ad network and cause
-                try {
-                    AdsLog.d(TAG, "onRewardedFailedLoad");
-                    if (listener != null) listener.OnShowFail();
-                }catch (Exception e){
-                    
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                AdsLog.d(TAG, "onUnityAdsFailedToLoad");
+                if (mRewardAdListener != null) {
+                    mRewardAdListener.OnShowFail();
                 }
             }
         });

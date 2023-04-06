@@ -436,11 +436,12 @@ public class AdsManager implements IAdManager {
 
     @Override
     public void forceShowAdModelPopup(Activity activity, String admodelName, PopupAdsListener listener) {
-        if (mAdsPlatform.get(0).mAdModel.getName().equals(admodelName))
-            mAdsPlatform.get(0).forceShowPopup(activity, listener);
-        if (mAdsPlatform.get(1).mAdModel.getName().equals(admodelName))
-            mAdsPlatform.get(1).forceShowPopup(activity, listener);
-        mPreviousTime = System.currentTimeMillis();
+        AdsLog.d(TAG, "forceShowAdModelPopup_size: " + mAdsPlatform.size());
+        for(int i=0; i<mAdsPlatform.size(); i++) {
+            if (mAdsPlatform.get(i).mAdModel.getName().equals(admodelName))
+                mAdsPlatform.get(i).forceShowPopup(activity, listener);
+            mPreviousTime = System.currentTimeMillis();
+        }
     }
 
     @Override

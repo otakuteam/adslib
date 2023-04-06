@@ -25,10 +25,11 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new ConfigFetcher(this).execute();
-
-        int waitTime = 3;
-        createTimer(waitTime);
+//        new ConfigFetcher(this).execute();
+//
+//        int waitTime = 3;
+//        createTimer(waitTime);
+        startMainActivity();
 
     }
     public void startMainActivity() {
