@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 31
-        versionCode 8
-        versionName "3.6"
+        targetSdkVersion 33
+        versionCode 6
+        versionName "3.5"
 
         //Vector drawables backward compatibility solution
         vectorDrawables.useSupportLibrary = true
