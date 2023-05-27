@@ -31,4 +31,4 @@ Need add some lines to fix some bugs
  implementation 'com.github.otakuteam:adslib:v3.4'
  
  # using up-to-date SDK, support openads on Admob and disable Unity mediation
- implementation 'com.github.otakuteam:adslib:v3.6'
+ implementation 'com.github.otakuteam:adslib:v3.8'
