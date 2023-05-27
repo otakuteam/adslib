@@ -5,8 +5,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 7
-        versionName "3.6"
+        versionCode 8
+        versionName "3.8"
 
         //Vector drawables backward compatibility solution
         vectorDrawables.useSupportLibrary = true
