@@ -29,3 +29,6 @@ Need add some lines to fix some bugs
  
  # using unity mediation with new version of google ads, add open ads
  implementation 'com.github.otakuteam:adslib:v3.4'
+ 
+ # using up-to-date SDK, support openads on Admob and disable Unity mediation
+ implementation 'com.github.otakuteam:adslib:v3.6'
