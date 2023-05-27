@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 16
-        versionName "1.16"
+        targetSdkVersion 33
+        versionCode 6
+        versionName "3.5"
 
         //Vector drawables backward compatibility solution
         vectorDrawables.useSupportLibrary = true
@@ -28,6 +28,7 @@ android {
 
 }
 
+
 repositories {
     google()
     jcenter()
@@ -43,16 +44,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     //admob
-    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+    implementation 'com.google.android.gms:play-services-ads:21.4.0'
+
     //unity
-    implementation 'com.unity3d.ads:unity-ads:4.2.1'
-    //facebook audience network
-    implementation 'androidx.annotation:annotation:1.0.0'
-    implementation 'com.facebook.android:audience-network-sdk:6.+'
+    implementation 'com.unity3d.ads:unity-ads:4.5.0'
 
-    //download
-    implementation 'com.mindorks.android:prdownloader:0.6.0'
-
-    implementation 'ir.samanjafari.easycountdowntimer:easycountdowntimer:2.5.0'
 }
 

@@ -2,94 +2,37 @@ package com.otaku.ad.waterfall.sample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.widget.TextView;
 
 import com.otaku.ad.waterfall.AdsConstants;
 import com.otaku.ad.waterfall.AdsManager;
 import com.otaku.ad.waterfall.NotSupportPlatformException;
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.model.AdModel;
+import com.otaku.ad.waterfall.util.AdsLog;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
+    final String TAG = getClass().getSimpleName();
+    private long secondsRemaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        try {
-            AdsManager.getInstance().init(this, true,
-//                    new AdModel(AdsConstants.ADMOB,
-//                            "ca-app-pub-3940256099942544~3347511713",
-//                            "ca-app-pub-3940256099942544/6300978111",
-//                            "ca-app-pub-3940256099942544/1033173712",
-//                            "ca-app-pub-3940256099942544/5224354917")
-//                    new AdModel(AdsConstants.FACEBOOK,
-//                            "ca-app-pub-3940256099942544~3347511713",
-//                            "ca-app-pub-3940256099942544/6300978111",
-//                            "ca-app-pub-3940256099942544/1033173712",
-//                            "ca-app-pub-3940256099942544/5224354917")
-                    new AdModel(AdsConstants.UNITY,
-                            "3617642",
-                            "banner",
-                            "video",
-                            "video")
+
+//        new ConfigFetcher(this).execute();
 //
-//                    new AdModel(AdsConstants.INHOUSE,
-//                            "",
-//                            "[\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://i.pinimg.com/564x/b2/24/77/b2247729bdc95247ac3724474b7a03f4.jpg\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.roblox.client\"\n" +
-//                                    "  },\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://i.pinimg.com/564x/78/a5/ed/78a5eddb161d03ed314967bb651265eb.jpg\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.innersloth.spacemafia\"\n" +
-//                                    "  }\n" +
-//                                    "]",
-//                            "[\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://i.pinimg.com/564x/26/a7/6d/26a76dbc138c4f1f79e2b8c7924462aa.jpg\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.roblox.client\"\n" +
-//                                    "  },\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://i.pinimg.com/564x/2f/e2/53/2fe25352bdcb4d296124f68dba652fa8.jpg\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.innersloth.spacemafia\"\n" +
-//                                    "  }\n" +
-//                                    "]",
-//                            "[\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://v.pinimg.com/videos/mc/720p/83/05/b5/8305b5bc6da97a7ceef4da419813e59d.mp4\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.roblox.client\"\n" +
-//                                    "  },\n" +
-//                                    "  {\n" +
-//                                    "    \"resource\": \"https://v.pinimg.com/videos/mc/720p/c8/1e/9d/c81e9d0bffd56719fb9de78a3d556760.mp4\",\n" +
-//                                    "    \"action\": \"https://play.google.com/store/apps/details?id=com.innersloth.spacemafia\"\n" +
-//                                    "  }\n" +
-//                                    "]")
-            );
-        } catch (NotSupportPlatformException e) {
-            e.printStackTrace();
-        }
-        AdsManager.getInstance().setLimitTime(0);
-       // AdsManager.getInstance().setPopupLimitShow(4);
-//        ArrayList<String> waterfall = new ArrayList<>();
-//        waterfall.add("admob");
-//        waterfall.add("unity");
-//        AdsManager.getInstance().saveWaterFall(waterfall);
-//        AdsManager.getInstance().saveAdModel( new AdModel(AdsConstants.ADMOB,
-//                "ca-app-pub",
-//                "ca-app-pub",
-//                "ca-app-pub-3940256099942544/",
-//                "ca-app-pub-3940256099942544/"));
-//        AdsManager.getInstance().saveAdModel(new AdModel(AdsConstants.UNITY,
-//                "3617642",
-//                "banner",
-//                "video",
-//                "rewardedVideo"));
+//        int waitTime = 3;
+//        createTimer(waitTime);
+        startMainActivity();
 
-        //new ConfigFetcher(this).execute();
-
+    }
+    public void startMainActivity() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -97,6 +40,45 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },1500);
+        }, 1000);
+    }
+    private void createTimer(long seconds) {
+        CountDownTimer countDownTimer =
+                new CountDownTimer(seconds * 1000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        secondsRemaining = ((millisUntilFinished / 1000) + 1);
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        secondsRemaining = 0;
+
+
+                        Application application = getApplication();
+
+                        // If the application is not an instance of MyApplication, log an error message and
+                        // start the MainActivity without showing the app open ad.
+                        if (!(application instanceof App)) {
+                            AdsLog.i(TAG, "Failed to cast application to MyApplication.");
+                                startMainActivity();
+                            return;
+                        }
+
+                        // Show the app open ad.
+                        ((App) application)
+                                .showAdIfAvailable(
+                                        SplashActivity.this,
+                                        new OpenAdsListener() {
+                                            @Override
+                                            public void OnShowAdComplete() {
+                                                AdsLog.i(TAG, "OnShowAdComplete.");
+                                                    startMainActivity();
+                                            }
+                                        });
+                    }
+                };
+        countDownTimer.start();
     }
 }

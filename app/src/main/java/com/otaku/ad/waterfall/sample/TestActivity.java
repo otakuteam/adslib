@@ -15,7 +15,7 @@ import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.util.AdsLog;
 
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
     private Context context;
 
     @Override
@@ -24,9 +24,9 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         context = this;
         AdsLog.d("TEST__", "onCreate_____________");
-        AdsManager.getInstance().showBanner((ViewGroup) findViewById(R.id.ads_banner));
+        AdsManager.getInstance().showBanner(TestActivity.this, (ViewGroup) findViewById(R.id.ads_banner));
 
-        AdsManager.getInstance().showPopup(new PopupAdsListener() {
+        AdsManager.getInstance().showPopup(TestActivity.this, new PopupAdsListener() {
             @Override
             public void OnClose() {
                 Log.i("TEST__", "_test_OnClose");
@@ -42,7 +42,7 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(getApplicationContext(), TestActivity.class);
 //                startActivity(intent);
-                AdsManager.getInstance().showReward(new RewardAdListener() {
+                AdsManager.getInstance().showReward(TestActivity.this, new RewardAdListener() {
                     @Override
                     public void OnClose() {
 

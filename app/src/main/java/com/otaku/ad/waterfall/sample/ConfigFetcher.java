@@ -28,7 +28,7 @@ public class ConfigFetcher extends AsyncTask<Void, Void, Void> {
     }
 
     public String getLink() {
-        return "https://otakuteam.github.io/config/adstest.json";
+        return "https://otakuteam.github.io/config/adstest-2.json";
     }
 
     @Override
@@ -76,10 +76,12 @@ public class ConfigFetcher extends AsyncTask<Void, Void, Void> {
                     String name = obj.getString("name");
                     String app_id = obj.getString("app_id");
                     String banner_id = obj.getString("banner_id");
-                    Log.i(TAG, "banner_id_test: " + banner_id);
                     String popup_id = obj.getString("popup_id");
                     String reward_id = obj.getString("reward_id");
-                    AdsManager.getInstance().saveAdModel(new AdModel(name, app_id, banner_id, popup_id, reward_id));
+                    String open_id = obj.getString("open_id");
+                    long popup_limit_time = obj.getLong("popup_time");
+                    Log.i(TAG, "banner_id_test: " + banner_id + " " + popup_id + " " + reward_id + " " + popup_limit_time);
+                    AdsManager.getInstance().saveAdModel(new AdModel(name, app_id, banner_id, popup_id, reward_id, open_id, popup_limit_time));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,8 +1,10 @@
 package com.otaku.ad.waterfall;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
@@ -12,11 +14,15 @@ import java.util.ArrayList;
 public interface IAdManager {
     void init(Context context, boolean testMode, AdModel... models)  throws NotSupportPlatformException;
 
-    void showBanner(ViewGroup banner);
+    void showBanner(Activity activity, ViewGroup banner);
 
-    void showPopup(PopupAdsListener listener);
+    void showPopup(Activity activity, PopupAdsListener listener);
 
-    void showReward(RewardAdListener listener);
+    void forceShowPopup(Activity activity, PopupAdsListener listener);
+
+    void forceShowAdModelPopup(Activity activity, String admodelName, PopupAdsListener listener);
+
+    void showReward(Activity activity, RewardAdListener listener);
 
     void muteAdsForever(); //sometime need to mute ads to capture screenshot or in premium version
 
@@ -34,4 +40,12 @@ public interface IAdManager {
     void saveAdModel(AdModel adModel); //save app_id, banner_id, popup_id, reward_id of an Ad platform
 
     AdModel getAdModelByName(String name); //get AdModel
+
+    void setShowBanner(boolean show);
+
+    void showOpenAdIfAvailable(Activity activity);
+
+    boolean isShowingOpenAd();
+
+    void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener);
 }

@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.otaku.ad.waterfall.AdsPlatform;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
+import com.otaku.ad.waterfall.listener.OpenAdsListener;
 import com.otaku.ad.waterfall.listener.PopupAdsListener;
 import com.otaku.ad.waterfall.listener.RewardAdListener;
 import com.otaku.ad.waterfall.model.AdModel;
@@ -23,7 +24,6 @@ import com.unity3d.services.banners.UnityBannerSize;
 
 public class UnityAdsManager extends AdsPlatform {
     private final String TAG = getClass().getSimpleName();
-    private Activity mActivity;
     private PopupAdsListener mPopupListener;
     private RewardAdListener mRewardAdListener;
 
@@ -33,9 +33,7 @@ public class UnityAdsManager extends AdsPlatform {
 
     @Override
     public void init(Context context, boolean testMode) {
-        mActivity = (Activity) context;
-
-        UnityAds.initialize(mActivity, mAdModel.getAppId(), testMode, new IUnityAdsInitializationListener() {
+        UnityAds.initialize(context, mAdModel.getAppId(), testMode, new IUnityAdsInitializationListener() {
             @Override
             public void onInitializationComplete() {
                 AdsLog.d(TAG, "onInitializationComplete");
@@ -49,10 +47,10 @@ public class UnityAdsManager extends AdsPlatform {
     }
 
     @Override
-    public void showBanner(ViewGroup banner, BannerAdsListener listener) {
+    public void showBanner(Activity activity, ViewGroup banner, BannerAdsListener listener) {
         if (banner != null) banner.removeAllViews();
-        BannerView adView = new BannerView(mActivity, mAdModel.getBannerId(),
-                UnityBannerSize.getDynamicSize(mActivity));
+        BannerView adView = new BannerView(activity, mAdModel.getBannerId(),
+                UnityBannerSize.getDynamicSize(activity));
         adView.setListener(new BannerView.Listener() {
             @Override
             public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
@@ -68,18 +66,18 @@ public class UnityAdsManager extends AdsPlatform {
             public void run() {
                 adView.load();
             }
-        }, 500);
+        }, 300);
     }
 
     @Override
-    public void showPopup(PopupAdsListener listener) {
+    public void showPopup(Activity activity, PopupAdsListener listener) {
         mPopupListener = listener;
         AdsLog.i(TAG, "showPopup");
         UnityAds.load(mAdModel.getPopupId(), new IUnityAdsLoadListener() {
             @Override
             public void onUnityAdsAdLoaded(String placementId) {
                 AdsLog.d(TAG, "onUnityAdsAdLoaded");
-                UnityAds.show(mActivity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                UnityAds.show(activity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                     @Override
                     public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                         AdsLog.d(TAG, "onUnityAdsShowFailure");
@@ -119,14 +117,19 @@ public class UnityAdsManager extends AdsPlatform {
     }
 
     @Override
-    public void showReward(RewardAdListener listener) {
+    public void forceShowPopup(Activity activity, PopupAdsListener listener) {
+        showPopup(activity, listener);
+    }
+
+    @Override
+    public void showReward(Activity activity, RewardAdListener listener) {
         AdsLog.i(TAG, "showReward");
         mRewardAdListener = listener;
         UnityAds.load(mAdModel.getRewardId(), new IUnityAdsLoadListener() {
             @Override
             public void onUnityAdsAdLoaded(String placementId) {
                 AdsLog.d(TAG, "onUnityAdsAdLoaded");
-                UnityAds.show(mActivity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                UnityAds.show(activity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                     @Override
                     public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                         AdsLog.d(TAG, "onUnityAdsShowFailure");
@@ -174,5 +177,25 @@ public class UnityAdsManager extends AdsPlatform {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean isOpenAdsAvailable() {
+        return false;
+    }
+
+    @Override
+    public boolean isShowingOpenAd() {
+        return false;
+    }
+
+    @Override
+    public void showOpenAdIfAvailable(Activity activity) {
+
+    }
+
+    @Override
+    public void showOpenAdIfAvailable(Activity activity, OpenAdsListener onShowAdCompleteListener) {
+
     }
 }

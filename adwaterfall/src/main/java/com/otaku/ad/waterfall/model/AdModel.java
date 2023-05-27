@@ -6,16 +6,39 @@ public class AdModel {
     private String bannerId;
     private String popupId;
     private String rewardId;
+    private String openId;
+    private long popupLimitTime;
 
     public AdModel() {
     }
 
-    public AdModel(String name, String appId, String bannerId, String popupId, String rewardId) {
+    public AdModel(String name, String appId, String bannerId, String popupId, String rewardId, String openId) {
         this.name = name;
         this.appId = appId;
         this.bannerId = bannerId;
         this.popupId = popupId;
         this.rewardId = rewardId;
+        this.openId = openId;
+        this.popupLimitTime = 0;
+    }
+
+    public AdModel(String name, String appId, String bannerId, String popupId, String rewardId, String openId, long popupLimitTime) {
+        this.name = name;
+        this.appId = appId;
+        this.bannerId = bannerId;
+        this.popupId = popupId;
+        this.rewardId = rewardId;
+        this.openId = openId;
+        this.popupLimitTime = popupLimitTime;
+    }
+
+    public long getPopupLimitTime() {
+        return popupLimitTime;
+    }
+
+    public AdModel setPopupLimitTime(long popupLimitTime) {
+        this.popupLimitTime = popupLimitTime;
+        return this;
     }
 
     public String getName() {
@@ -60,6 +83,15 @@ public class AdModel {
 
     public AdModel setRewardId(String rewardId) {
         this.rewardId = rewardId;
+        return this;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public AdModel setOpenId(String openId) {
+        this.openId = openId;
         return this;
     }
 }

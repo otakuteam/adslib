@@ -1,4 +1,4 @@
-package com.otaku.ad.waterfall.admob;
+package com.otaku.ad.waterfall.gamob;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 
-public class AdmobAdsManager extends AdsPlatform {
+public class GamobAdsManager extends AdsPlatform {
     public final String TAG = getClass().getSimpleName();
     private Context mContext;
     private InterstitialAd popupAd;
@@ -55,7 +55,7 @@ public class AdmobAdsManager extends AdsPlatform {
     private AppOpenAd appOpenAd;
     private OpenAdsListener adOpenListener;
 
-    public AdmobAdsManager(AdModel adModel) {
+    public GamobAdsManager(AdModel adModel) {
         this.mAdModel = adModel;
     }
 
