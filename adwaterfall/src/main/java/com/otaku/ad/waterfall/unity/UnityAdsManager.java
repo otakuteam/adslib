@@ -129,7 +129,7 @@ public class UnityAdsManager extends AdsPlatform {
             @Override
             public void onUnityAdsAdLoaded(String placementId) {
                 AdsLog.d(TAG, "onUnityAdsAdLoaded");
-                UnityAds.show(activity, mAdModel.getPopupId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                UnityAds.show(activity, mAdModel.getRewardId(), new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                     @Override
                     public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                         AdsLog.d(TAG, "onUnityAdsShowFailure");
