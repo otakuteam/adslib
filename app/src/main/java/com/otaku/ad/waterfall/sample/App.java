@@ -25,12 +25,19 @@ public class App extends Application implements Application.ActivityLifecycleCal
         super.onCreate();
         try {
             AdsManager.getInstance().init(this, false,
-                    new AdModel(AdsConstants.UNITY,
-                            "3617642",
-                            "banner",
-                            "video",
-                            "video",
-                            ""));
+//                    new AdModel(AdsConstants.UNITY,
+//                            "3617642",
+//                            "banner",
+//                            "video",
+//                            "video",
+//                            "")
+                    new AdModel(AdsConstants.FACEBOOK,
+                            "",
+                            "486294252545927_503710067471012",
+                            "486294252545927_503711464137539",
+                            "",
+                            "")
+            );
         } catch (NotSupportPlatformException e) {
             e.printStackTrace();
         }

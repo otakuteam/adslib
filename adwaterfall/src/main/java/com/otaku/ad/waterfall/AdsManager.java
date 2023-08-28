@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otaku.ad.waterfall.admob.AdmobAdsManager;
+import com.otaku.ad.waterfall.facebook.FanManager;
 import com.otaku.ad.waterfall.gamob.GamobAdsManager;
 import com.otaku.ad.waterfall.listener.BannerAdsListener;
 import com.otaku.ad.waterfall.listener.OpenAdsListener;
@@ -52,7 +53,7 @@ public class AdsManager implements IAdManager {
         AdsPreferenceUtil.getInstance().init(context);
         AdsLog.isDebug = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         mEnableAd = AdsPreferenceUtil.getInstance().getBoolean(AdsConstants.PREF_ENABLE_AD, true);
-        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY, AdsConstants.GAMOB});
+        List<String> supportPlatforms = Arrays.asList(new String[]{AdsConstants.ADMOB, AdsConstants.UNITY, AdsConstants.GAMOB, AdsConstants.FACEBOOK});
         ArrayList<String> waterFall = getWaterfall();
 
         if (waterFall == null || waterFall.isEmpty()) {
@@ -831,6 +832,16 @@ public class AdsManager implements IAdManager {
                     );
                 }
                 return new UnityAdsManager(adModel);
+            case AdsConstants.FACEBOOK:
+                if (adModel == null) {
+                    adModel = new AdModel(AdsConstants.FACEBOOK, mContext.getString(R.string.app_id),
+                            mContext.getString(R.string.banner_id),
+                            mContext.getString(R.string.popup_id),
+                            mContext.getString(R.string.reward_id),
+                            mContext.getString(R.string.open_id)
+                    );
+                }
+                return new FanManager(adModel);
             default:
                 if (adModel == null) {
                     adModel = new AdModel(AdsConstants.ADMOB, mContext.getString(R.string.app_id),
