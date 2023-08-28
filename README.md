@@ -32,3 +32,9 @@ Need add some lines to fix some bugs
  
  # using up-to-date SDK, support openads on Admob and disable Unity mediation
  implementation 'com.github.otakuteam:adslib:v3.8'
+
+ # Admob, Gamob, Unity, Facebook with up-to-date lib version (08/2023)
+ implementation 'com.github.otakuteam:adslib:v3.9'
+
+ # NOTE
+ Maximum level of 3 Ads network allow
